@@ -1,6 +1,8 @@
 from .views import ProductView
+from .views import CartItemView
 from django.urls import path
 
 urlpatterns = [
-    path('home', ProductView.as_view()),  # Include the API URLs
+    path('Product', ProductView.as_view()),
+    path('CartItem', CartItemView.as_view()),  # Include the API URLs
 ]
