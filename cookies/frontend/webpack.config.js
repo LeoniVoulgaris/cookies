@@ -5,7 +5,7 @@ module.exports = {
   entry: "./src/index.js",
   output: {
     path: path.resolve(__dirname, "./static/frontend"),
-    filename: "[name].js",
+    filename: "main.js", // keep it simple
   },
   module: {
     rules: [
@@ -14,6 +14,10 @@ module.exports = {
         exclude: /node_modules/,
         use: {
           loader: "babel-loader",
+          options: {
+            presets: ["@babel/preset-env", "@babel/preset-react"],
+            plugins: ["@babel/plugin-transform-class-properties"],
+          },
         },
       },
     ],
@@ -22,13 +26,9 @@ module.exports = {
     minimize: true,
   },
   plugins: [
-    
     new webpack.DefinePlugin({
-      "process.env": {
-        // This has effect on the react lib size
-        NODE_ENV: JSON.stringify("development"),
-      },
+      "process.env.NODE_ENV": JSON.stringify("development"),
     }),
-
   ],
+  mode: "development", // 👈 add this to silence the warning
 };
