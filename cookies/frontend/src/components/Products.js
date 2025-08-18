@@ -2,6 +2,10 @@ import React, { Component } from "react";
 
 export default class ProductsPage extends Component {   
   render() {
-    return <p>Welcome to the Products Page</p>;
+    return (
+        <div className="min-h-screen bg-yellow-50 flex items-center justify-center">
+         <h1 className="text-4xl font-bold text-yellow-800">Cookie Stores</h1>
+        </div>
+    );
   }
 }
