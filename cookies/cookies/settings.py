@@ -40,7 +40,10 @@ INSTALLED_APPS = [
     'api.apps.ApiConfig',
     'rest_framework',
     'frontend.apps.FrontendConfig',
+    'tailwind',
 ]
+
+TAILWIND_APP_NAME = 'frontend'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

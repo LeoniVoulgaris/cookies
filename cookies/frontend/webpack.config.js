@@ -8,20 +8,24 @@ module.exports = {
     filename: "main.js", // keep it simple
   },
   module: {
-    rules: [
-      {
-        test: /\.js$/,
-        exclude: /node_modules/,
-        use: {
-          loader: "babel-loader",
-          options: {
-            presets: ["@babel/preset-env", "@babel/preset-react"],
-            plugins: ["@babel/plugin-transform-class-properties"],
-          },
+  rules: [
+    {
+      test: /\.js$/,
+      exclude: /node_modules/,
+      use: {
+        loader: "babel-loader",
+        options: {
+          presets: ["@babel/preset-env", "@babel/preset-react"],
+          plugins: ["@babel/plugin-transform-class-properties"],
         },
       },
-    ],
-  },
+    },
+    {
+      test: /\.css$/i,   // 👈 this handles CSS files
+      use: ["style-loader", "css-loader"],
+    },
+  ],
+},
   optimization: {
     minimize: true,
   },
