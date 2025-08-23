@@ -51,12 +51,12 @@ const NavBar = () => {
 
       <div className="flex items-center gap-4">
         <div className="sm:flex sm:gap-4">
-          <a
-            className="rounded-md bg-blue-600 px-5 py-2.5 text-sm font-medium text-white shadow-sm"
-            href="#"
-          >
-            Login
-          </a>
+          <Link
+              className="rounded-md bg-gray-100 px-5 py-2.5 text-sm font-medium text-teal-600"
+              to="/signin"
+            >
+              Login
+            </Link>
 
           <div className="hidden sm:flex">
             <Link
