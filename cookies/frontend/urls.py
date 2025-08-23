@@ -3,5 +3,6 @@ from .views import index
 
 urlpatterns = [
     path('', index) ,
-    path('products', index) # Include the API URLs
+    path('products', index),
+    path('signup', index) # Include the API URLs
 ]

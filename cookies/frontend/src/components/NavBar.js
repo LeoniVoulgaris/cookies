@@ -1,5 +1,6 @@
 // File: frontend/components/NavBar.jsx
 import React from "react";
+import {Link} from "react-router-dom";
 
 const NavBar = () => {
   return (
@@ -58,12 +59,12 @@ const NavBar = () => {
           </a>
 
           <div className="hidden sm:flex">
-            <a
+            <Link
               className="rounded-md bg-gray-100 px-5 py-2.5 text-sm font-medium text-teal-600"
-              href="#"
+              to="/signup"
             >
               Register
-            </a>
+            </Link>
           </div>
         </div>
 
@@ -86,7 +87,8 @@ const NavBar = () => {
       </div>
     </div>
   </div>
-</header>
+
+    </header>
   );
 };
 
