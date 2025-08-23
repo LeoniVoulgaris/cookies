@@ -24,6 +24,10 @@ module.exports = {
       test: /\.css$/i,   // 👈 this handles CSS files
       use: ["style-loader", "css-loader"],
     },
+    {
+      test: /\.(png|jpe?g|gif|svg)$/i,
+      type: 'asset/resource'
+    }
   ],
 },
   optimization: {
