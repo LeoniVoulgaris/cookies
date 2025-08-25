@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'frontend.apps.FrontendConfig',
     'tailwind',
+    'core'
 ]
 
 TAILWIND_APP_NAME = 'frontend'
