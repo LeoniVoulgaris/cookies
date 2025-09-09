@@ -17,7 +17,7 @@ class DetailedProductSerializer(serializers.ModelSerializer):
     similar_products = serializers.SerializerMethodField()
     class Meta:
         model = Product
-        fields = ['id', 'name', 'price', 'slug', 'image', 'similar_products']
+        fields = ['id', 'name', 'price', 'slug', 'image', 'description', 'category', 'similar_products']
 
 
     def get_similar_products(self, product):
