@@ -1,7 +1,7 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
         content: [
-          "./src/**/*.{html,js}",
+          "./src/**/*.{html,js,jsx,ts,tsx}",
           '../cookies/templates/**/*.html',  // Django templates
           './static/js/**/*.js'
 

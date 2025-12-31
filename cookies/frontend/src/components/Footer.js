@@ -1,103 +1,49 @@
 import React from "react";
 import { Link } from "react-scroll";
+import { Cookie } from "lucide-react";
 
 const Footer = () => {
   return (
-    <footer className=" bg-black text-white rounded-t-3xl mt-8 md:mt-0">
-      <div className="flex flex-col md:flex-row justify-between p-8 md:px-32 px-5">
-        <div className=" w-full md:w-1/4">
-          <h1 className=" font-semibold text-xl pb-4">Posted</h1>
-          <p className=" text-sm">
-            woenfowejgnoweknowekgnoewkgn;wkrnvekn vejnr vjren ve nv
-          </p>
-        </div>
-        <div>
-          <h1 className=" font-medium text-xl pb-4 pt-5 md:pt-0">Links</h1>
-          <div className=" flex flex-col gap-2">
-            <Link
-              to="speciality"
-              spy={true}
-              smooth={true}
-              duration={500}
-              className=" cursor-pointer hover:text-yellow-500 transition duration-300 ease-in-out"
-            >
-              Speciality
-            </Link>
-            <Link
-              to="about"
-              spy={true}
-              smooth={true}
-              duration={500}
-              className=" cursor-pointer hover:text-yellow-500 transition duration-300 ease-in-out"
-            >
-              About
-            </Link>
-            <Link
-              to="menu"
-              spy={true}
-              smooth={true}
-              duration={500}
-              className=" cursor-pointer hover:text-yellow-500 transition duration-300 ease-in-out"
-            >
-              Menu
-            </Link>
-            <Link
-              to="review"
-              spy={true}
-              smooth={true}
-              duration={500}
-              className=" cursor-pointer hover:text-yellow-500 transition duration-300 ease-in-out"
-            >
-              Review
-            </Link>
+    <footer className="bg-gray-900 text-white py-12">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid md:grid-cols-4 gap-8 mb-8">
+            <div>
+              <div className="flex items-center gap-2 mb-4">
+                <Cookie className="w-6 h-6 text-red-600" />
+                <span>Posted Cookies</span>
+              </div>
+              <p className="text-gray-400">Delivering happiness, one cookie at a time.</p>
+            </div>
+            <div>
+              <h4 className="mb-4">Shop</h4>
+              <ul className="space-y-2 text-gray-400">
+                <li><a href="#" className="hover:text-red-600 transition-colors">All Products</a></li>
+                <li><a href="#" className="hover:text-red-600 transition-colors">Best Sellers</a></li>
+                <li><a href="#" className="hover:text-red-600 transition-colors">Gift Boxes</a></li>
+              </ul>
+            </div>
+            <div>
+              <h4 className="mb-4">Company</h4>
+              <ul className="space-y-2 text-gray-400">
+                <li><a href="#" className="hover:text-red-600 transition-colors">About Us</a></li>
+                <li><a href="#" className="hover:text-red-600 transition-colors">Our Story</a></li>
+                <li><a href="#" className="hover:text-red-600 transition-colors">Careers</a></li>
+              </ul>
+            </div>
+            <div>
+              <h4 className="mb-4">Support</h4>
+              <ul className="space-y-2 text-gray-400">
+                <li><a href="#" className="hover:text-red-600 transition-colors">Contact</a></li>
+                <li><a href="#" className="hover:text-red-600 transition-colors">FAQs</a></li>
+                <li><a href="#" className="hover:text-red-600 transition-colors">Shipping</a></li>
+              </ul>
+            </div>
+          </div>
+          <div className="border-t border-gray-800 pt-8 text-center text-gray-400">
+            <p>&copy; 2024 Posted Cookies. All rights reserved.</p>
           </div>
         </div>
-        <div>
-          <h1 className=" font-medium text-xl pb-4 pt-5 md:pt-0">Menu</h1>
-          <div className=" flex flex-col gap-2">
-            <Link
-              to="speciality"
-              spy={true}
-              smooth={true}
-              duration={500}
-              className=" cursor-pointer hover:text-yellow-500 transition duration-300 ease-in-out"
-            >
-              Speciality
-            </Link>
-            <Link
-              to="menu"
-              spy={true}
-              smooth={true}
-              duration={500}
-              className=" cursor-pointer hover:text-yellow-500 transition duration-300 ease-in-out"
-            >
-              Menu
-            </Link>
-          </div>
-        </div>
-        <div>
-          <h1 className=" font-medium text-xl pb-4 pt-5 md:pt-0">Contact Us</h1>
-          <div className=" flex flex-col gap-2">
-            <Link to="/" spy={true} smooth={true} duration={500}>
-              CheesyBites@gmail.com
-            </Link>
-            <Link to="/" spy={true} smooth={true} duration={500}>
-              +64 958 248 966
-            </Link>
-            <Link to="/" spy={true} smooth={true} duration={500}>
-              Social media
-            </Link>
-          </div>
-        </div>
-      </div>
-      <div>
-        <p className=" text-center py-4">
-          @copyright developed by
-          <span className=" text-yellow-500"> champion programmers</span> | All
-          rights reserved
-        </p>
-      </div>
-    </footer>
+      </footer>
   );
 };
 

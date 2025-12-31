@@ -3,6 +3,8 @@ import NavBar from "./NavBar";
 import Footer from "./Footer";
 import Signin from "./Signin";
 import Hero from "./Hero";
+import Contact from "./Contact";
+import About from "./About";
 import Menu from "./Menu";
 import api from "../api";
 
@@ -25,7 +27,9 @@ const HomePage = () => {
     <>
       <NavBar />
       <div><Hero /></div>
-      <div><Menu products={products} /></div>
+      <div><Menu  /></div>
+      <div><About /></div>
+      <div><Contact /></div>
       <Footer />
     </>
   );
