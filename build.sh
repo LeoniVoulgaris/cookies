@@ -1,13 +1,25 @@
 #!/usr/bin/env sh
 set -o errexit
 
-# install dependencies
+# Ensure the project root is in PYTHONPATH
+export PYTHONPATH=$PYTHONPATH:$(pwd)
+
+# Tell Django where to find settings
+export DJANGO_SETTINGS_MODULE=cookies.settings
+
+# Activate virtual environment (if using Render's default venv path)
+if [ -f "./.venv/bin/activate" ]; then
+    . ./.venv/bin/activate
+fi
+
+# Upgrade pip to latest version
+pip install --upgrade pip
+
+# Install dependencies
 pip install -r requirements.txt
 
-# set Django settings module
-export DJANGO_SETTINGS_MODULE=cookies.settings
-export PYTHONPATH=$(pwd)  # ensures the repo root is on Python path
-
-# run Django management commands
+# Collect static files
 python manage.py collectstatic --noinput
+
+# Run migrations
 python manage.py migrate
