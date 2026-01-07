@@ -1,6 +1,6 @@
 #!/usr/bin/env sh
 set -o errexit
-
+cd "$(dirname "$0")"
 # Ensure the project root is in PYTHONPATH
 export PYTHONPATH=$PYTHONPATH:$(pwd)
 
