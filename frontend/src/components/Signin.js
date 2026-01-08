@@ -1,72 +1,150 @@
-import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import React from "react";
+import { Cookie, Mail, Lock, Eye, EyeOff } from "lucide-react";
+import { useState } from "react";
+import { useNavigate, Link } from "react-router-dom";
 import { UserAuth } from "../context/AuthContext";
 
-const Signin = () => {
+export function SignIn({ onBack }) {
+  const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState(null);
+  const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
   const { signInUser } = UserAuth();
   const navigate = useNavigate();
 
-  const handleSignIn = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const { session, error } = await signInUser(email, password); // Use your signIn function
+    setLoading(true);
+    setError("");
+
+    const { session, error } = await signInUser(email, password);
 
     if (error) {
-      setError(error); // Set the error message if sign-in fails
+      setError(error);
+      setLoading(false);
 
-      // Set a timeout to clear the error message after a specific duration (e.g., 3 seconds)
       setTimeout(() => {
         setError("");
-      }, 3000); // 3000 milliseconds = 3 seconds
-    } else {
-      // Redirect or perform any necessary actions after successful sign-in
-      navigate("/#");
+      }, 3000);
+      return;
     }
 
     if (session) {
-      closeModal();
-      setError(""); // Reset the error when there's a session
+      navigate("/#");
     }
+
+    setLoading(false);
   };
 
   return (
-    <div>
-      <form onSubmit={handleSignIn} className="max-w-md m-auto pt-24">
-        <h2 className="font-bold pb-2">Sign in</h2>
-        <p>
-          Don't have an account yet? <Link to="/signup">Sign up</Link>
-        </p>
-        <div className="flex flex-col py-4">
-          {/* <label htmlFor="Email">Email</label> */}
-          <input
-            onChange={(e) => setEmail(e.target.value)}
-            className="p-3 mt-2"
-            type="email"
-            name="email"
-            id="email"
-            placeholder="Email"
-          />
+    <div className="min-h-screen bg-gradient-to-br from-red-50 to-white flex items-center justify-center p-4">
+      <div className="w-full max-w-md">
+        {/* Logo and Header */}
+        <div className="text-center mb-8">
+          <div className="flex items-center justify-center gap-2 mb-4">
+            <Cookie className="w-12 h-12 text-red-600" />
+            <h1 className="text-3xl text-red-600">Posted Cookies</h1>
+          </div>
+          <h2 className="text-gray-900 text-2xl mb-2">Welcome Back!</h2>
+          <p className="text-gray-600">
+            Sign in to continue your sweet journey
+          </p>
         </div>
-        <div className="flex flex-col py-4">
-          {/* <label htmlFor="Password">Password</label> */}
-          <input
-            onChange={(e) => setPassword(e.target.value)}
-            className="p-3 mt-2"
-            type="password"
-            name="password"
-            id="password"
-            placeholder="Password"
-          />
+
+        {/* Sign In Form */}
+        <div className="bg-white rounded-2xl shadow-2xl p-8">
+          <form onSubmit={handleSubmit} className="space-y-6">
+            {/* Email */}
+            <div>
+              <label className="block text-gray-700 mb-2">
+                Email Address
+              </label>
+              <div className="relative">
+
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="you@example.com"
+                  className="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-600"
+                  required
+                />
+              </div>
+            </div>
+
+            {/* Password */}
+            <div>
+              <label className="block text-gray-700 mb-2">
+                Password
+              </label>
+              <div className="relative">
+
+                <input
+                  type={showPassword ? "text" : "password"}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="••••••••"
+                  className="w-full pl-12 pr-12 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-600"
+                  required
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400"
+                >
+                  {showPassword ? (
+                    <EyeOff className="w-5 h-5" />
+                  ) : (
+                    <Eye className="w-5 h-5" />
+                  )}
+                </button>
+              </div>
+            </div>
+
+            {/* Error */}
+            {error && (
+              <p className="text-red-600 text-center text-sm">
+                {error}
+              </p>
+            )}
+
+            {/* Submit */}
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full bg-red-600 text-white py-3 rounded-lg hover:bg-red-700 transition disabled:opacity-50"
+            >
+              {loading ? "Signing in..." : "Sign In"}
+            </button>
+
+            {/* Sign up */}
+            <p className="text-center text-gray-600">
+              Don't have an account?{" "}
+              <Link
+                to="/signup"
+                className="text-red-600 hover:text-red-700"
+              >
+                Sign up
+              </Link>
+            </p>
+          </form>
         </div>
-        <button className="w-full mt-4">Sign In</button>
-        {error && <p className="text-red-600 text-center pt-4">{error}</p>}
-      </form>
+
+        {/* Back */}
+        {onBack && (
+          <div className="text-center mt-6">
+            <button
+              onClick={onBack}
+              className="text-gray-600 hover:text-red-600"
+            >
+              ← Back to Home
+            </button>
+          </div>
+        )}
+      </div>
     </div>
   );
-};
-
-export default Signin;
+}
+export default SignIn;
