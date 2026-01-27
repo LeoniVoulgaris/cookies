@@ -62,7 +62,7 @@ export function SignIn({ onBack }) {
                 Email Address
               </label>
               <div className="relative">
-
+                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                 <input
                   type="email"
                   value={email}
@@ -80,7 +80,7 @@ export function SignIn({ onBack }) {
                 Password
               </label>
               <div className="relative">
-
+                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                 <input
                   type={showPassword ? "text" : "password"}
                   value={password}
@@ -132,19 +132,19 @@ export function SignIn({ onBack }) {
           </form>
         </div>
 
-        {/* Back */}
-        {onBack && (
-          <div className="text-center mt-6">
-            <button
-              onClick={onBack}
-              className="text-gray-600 hover:text-red-600"
+        {/* Back to Home */}
+
+        <div className="text-center mt-6">
+          <Link
+              to="/"
+              className="text-red-600 hover:text-red-700"
             >
-              ← Back to Home
-            </button>
-          </div>
-        )}
-      </div>
+                Back to Home
+            </Link>
+        </div>
+
     </div>
+  </div>
   );
 }
 export default SignIn;

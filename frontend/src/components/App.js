@@ -16,7 +16,7 @@ export default function App() {
           <Route path="/" element={<HomePage />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/signin" element={<Signin />} />
-          <Route path="product/:slug" element={<Products />} />
+          <Route path="product/:slug/" element={<Products />} />
         </Routes>
       </Router>
     </AuthContextProvider>

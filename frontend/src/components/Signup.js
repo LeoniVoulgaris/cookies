@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { UserAuth } from "../context/AuthContext";
 import { Cookie, Mail, Lock, Eye, EyeOff, User } from "lucide-react";
 
@@ -267,27 +267,27 @@ const Signup = ({ onBack, onSignInClick }) => {
           <div className="mt-6 text-center">
             <p className="text-gray-600">
               Already have an account?{' '}
-              <button
-                onClick={onSignInClick}
-                className="text-red-600 hover:text-red-700 transition-colors"
+              <Link
+                to="/signin"
+                className="text-red-600 hover:text-red-700"
               >
                 Sign in
-              </button>
+              </Link>
             </p>
           </div>
         </div>
 
         {/* Back to Home */}
-        {onBack && (
+
           <div className="text-center mt-6">
-            <button
-              onClick={onBack}
-              className="text-gray-600 hover:text-red-600 transition-colors"
-            >
-              ← Back to Home
-            </button>
+            <Link
+                to="/"
+                className="text-red-600 hover:text-red-700"
+              >
+                 Back to Home
+              </Link>
           </div>
-        )}
+
       </div>
     </div>
   );

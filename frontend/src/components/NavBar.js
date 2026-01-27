@@ -24,16 +24,21 @@ const NavBar = () => {
             <div className="flex items-center gap-4">
               <button className="relative p-2 hover:bg-gray-100 rounded-full transition-colors">
                 <ShoppingCart className="w-6 h-6 text-gray-700" />
-                <span className="absolute -top-1 -right-1 bg-red-600 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs">
-                  3
-                </span>
                 </button>
-                <button
+                <Link
+                to="/signin"
                 onClick={() => setShowSignIn(true)}
                 className="hidden md:block bg-red-600 text-white px-6 py-2 rounded-lg hover:bg-red-700 transition-colors"
               >
                 Sign In
-              </button>
+              </Link>
+              <Link
+                to="/signup"
+                onClick={() => setShowSignUp(true)}
+                className="hidden md:block bg-red-600 text-white px-6 py-2 rounded-lg hover:bg-red-700 transition-colors"
+              >
+                Sign Up
+              </Link>
               <button className="md:hidden p-2 hover:bg-gray-100 rounded-full transition-colors">
                 <Menu className="w-6 h-6 text-gray-700" />
               </button>

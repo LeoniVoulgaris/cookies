@@ -22,7 +22,7 @@ module.exports = {
     },
     {
       test: /\.css$/i,   // 👈 this handles CSS files
-      use: ["style-loader", "css-loader"],
+      use: ["style-loader", "css-loader", "postcss-loader"],
     },
     {
       test: /\.(png|jpe?g|gif|svg)$/i,
