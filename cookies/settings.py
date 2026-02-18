@@ -149,3 +149,4 @@ AUTH_USER_MODEL = 'core.CustomUser'
 
 REACT_BASE_URL = os.getenv('REACT_BASE_URL', 'http://localhost:3000')
 
+SUPABASE_JWT_SECRET = os.getenv('SUPABASE_JWT_SECRET')

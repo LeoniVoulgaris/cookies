@@ -19,7 +19,16 @@ export function SignIn({ onBack }) {
     setLoading(true);
     setError("");
 
-    const { session, error } = await signInUser(email, password);
+    const result = await signInUser(email, password);
+
+    if (!result.success) {
+      setError(result.error);
+      setLoading(false);
+      return;
+    }
+
+    navigate("/");
+
 
     if (error) {
       setError(error);

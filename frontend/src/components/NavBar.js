@@ -2,8 +2,17 @@
 import React from "react";
 import {Link} from "react-router-dom";
 import {Cookies, Cookie, ShoppingCart, Menu} from "lucide-react";
+import { UserAuth } from "../context/AuthContext";
+import { useCart } from "../context/CartContext";
+
+
+
 
 const NavBar = () => {
+  const { user, loading } = UserAuth();
+  const { cart } = useCart();
+  console.log("Auth state:", { user, loading });
+
   return (
     <>
       <header className="bg-white border-b border-gray-200 sticky top-0 z-50">
@@ -23,7 +32,12 @@ const NavBar = () => {
 
             <div className="flex items-center gap-4">
               <button className="relative p-2 hover:bg-gray-100 rounded-full transition-colors">
-                <ShoppingCart className="w-6 h-6 text-gray-700" />
+                  <ShoppingCart className="w-6 h-6 text-gray-700" />
+                  {cart?.items?.length > 0 && (
+                    <span className="absolute top-0 right-0 bg-red-600 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                      {cart.items.reduce((acc, item) => acc + item.quantity, 0)}
+                    </span>
+                  )}
                 </button>
                 <Link
                 to="/signin"
