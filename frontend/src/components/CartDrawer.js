@@ -56,7 +56,7 @@ const CartDrawer = () => {
                 <li key={item.id} className="py-4 flex gap-4">
                   {item.image && (
                     <img
-                      src={`http://localhost:8000${item.image}`}
+                      src={item.image}
                       alt={item.product_name}
                       className="w-16 h-16 object-cover rounded-lg flex-shrink-0"
                     />

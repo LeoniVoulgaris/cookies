@@ -12,6 +12,12 @@ export DJANGO_SETTINGS_MODULE=cookies.settings
 pip install --upgrade pip
 pip install -r requirements.txt
 
+# Build React bundle
+cd frontend
+npm install
+npm run build
+cd ..
+
 # Collect static files
 python manage.py collectstatic --noinput
 

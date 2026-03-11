@@ -323,7 +323,7 @@ const Checkout = () => {
                   <li key={item.id} className="py-3 flex gap-3 items-center">
                     {item.image && (
                       <img
-                        src={`http://localhost:8000${item.image}`}
+                        src={item.image}
                         alt={item.product_name}
                         className="w-10 h-10 object-cover rounded-lg flex-shrink-0"
                       />

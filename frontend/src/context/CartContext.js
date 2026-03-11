@@ -24,13 +24,13 @@ export const CartProvider = ({ children }) => {
 
     const fetchCart = async () => {
         setLoading(true);
-        const data = await fetchWithAuth('http://localhost:8000/api/cart/');
+        const data = await fetchWithAuth('/api/cart/');
         setCart(data);
         setLoading(false);
     };
 
     const addToCart = async (productId, quantity = 1) => {
-        const data = await fetchWithAuth('http://localhost:8000/api/cart/', {
+        const data = await fetchWithAuth('/api/cart/', {
             method: 'POST',
             body: JSON.stringify({ product_id: productId, quantity }),
         });
@@ -38,7 +38,7 @@ export const CartProvider = ({ children }) => {
     };
 
     const updateQuantity = async (itemId, quantity) => {
-        const data = await fetchWithAuth(`http://localhost:8000/api/cart/update/${itemId}/`, {
+        const data = await fetchWithAuth(`/api/cart/update/${itemId}/`, {
             method: 'PATCH',
             body: JSON.stringify({ quantity }),
         });
@@ -46,7 +46,7 @@ export const CartProvider = ({ children }) => {
     };
 
     const removeItem = async (itemId) => {
-        const data = await fetchWithAuth(`http://localhost:8000/api/cart/update/${itemId}/`, {
+        const data = await fetchWithAuth(`/api/cart/update/${itemId}/`, {
             method: 'PATCH',
             body: JSON.stringify({ quantity: 0 }),
         });
@@ -54,12 +54,12 @@ export const CartProvider = ({ children }) => {
     };
 
     const clearCart = async () => {
-        await fetchWithAuth('http://localhost:8000/api/cart/', { method: 'DELETE' });
+        await fetchWithAuth('/api/cart/', { method: 'DELETE' });
         setCart(prev => prev ? { ...prev, items: [], total_price: '0.00' } : null);
     };
 
     const checkout = async (formData = {}) => {
-        const data = await fetchWithAuth('http://localhost:8000/api/checkout/', {
+        const data = await fetchWithAuth('/api/checkout/', {
             method: 'POST',
             body: JSON.stringify(formData),
         });
@@ -68,7 +68,7 @@ export const CartProvider = ({ children }) => {
     };
 
     const createStripeSession = async (formData = {}) => {
-        return await fetchWithAuth('http://localhost:8000/api/create-checkout-session/', {
+        return await fetchWithAuth('/api/create-checkout-session/', {
             method: 'POST',
             body: JSON.stringify(formData),
         });

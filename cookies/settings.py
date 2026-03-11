@@ -23,12 +23,16 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-*gkf+8kg^8#rdqv95&qm1zxl4z6w^#dopuv6h6fy1lj_umba6!'
+SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-*gkf+8kg^8#rdqv95&qm1zxl4z6w^#dopuv6h6fy1lj_umba6!')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv('DEBUG', 'True') == 'True'
 
-ALLOWED_HOSTS = ["cookies-0ebg.onrender.com", "localhost", "127.0.0.1"]
+_allowed = ["cookies-0ebg.onrender.com", "localhost", "127.0.0.1"]
+_extra = os.getenv('EXTRA_ALLOWED_HOST')
+if _extra:
+    _allowed.append(_extra)
+ALLOWED_HOSTS = _allowed
 
 
 # Application definition
@@ -61,7 +65,14 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
-CORS_ALLOW_ALL_ORIGINS = True
+if DEBUG:
+    CORS_ALLOW_ALL_ORIGINS = True
+else:
+    _cors = ["https://cookies-0ebg.onrender.com"]
+    _extra_cors = os.getenv('EXTRA_ALLOWED_HOST')
+    if _extra_cors:
+        _cors.append(f"https://{_extra_cors}")
+    CORS_ALLOWED_ORIGINS = _cors
 
 ROOT_URLCONF = 'cookies.urls'
 
