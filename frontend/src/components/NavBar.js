@@ -1,17 +1,14 @@
 // File: frontend/components/NavBar.jsx
-import React from "react";
-import {Link} from "react-router-dom";
-import {Cookies, Cookie, ShoppingCart, Menu} from "lucide-react";
-import { UserAuth } from "../context/AuthContext";
+import React, { useState } from "react";
+import { Cookie, ShoppingCart, Menu as MenuIcon, X } from "lucide-react";
 import { useCart } from "../context/CartContext";
-
-
-
+import CartDrawer from "./CartDrawer";
 
 const NavBar = () => {
-  const { user, loading } = UserAuth();
-  const { cart } = useCart();
-  console.log("Auth state:", { user, loading });
+  const { cart, openCart } = useCart();
+  const [mobileOpen, setMobileOpen] = useState(false);
+
+  const totalItems = cart?.items?.reduce((acc, item) => acc + item.quantity, 0) ?? 0;
 
   return (
     <>
@@ -31,35 +28,45 @@ const NavBar = () => {
             </nav>
 
             <div className="flex items-center gap-4">
-              <button className="relative p-2 hover:bg-gray-100 rounded-full transition-colors">
-                  <ShoppingCart className="w-6 h-6 text-gray-700" />
-                  {cart?.items?.length > 0 && (
-                    <span className="absolute top-0 right-0 bg-red-600 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
-                      {cart.items.reduce((acc, item) => acc + item.quantity, 0)}
-                    </span>
-                  )}
-                </button>
-                <Link
-                to="/signin"
-                onClick={() => setShowSignIn(true)}
-                className="hidden md:block bg-red-600 text-white px-6 py-2 rounded-lg hover:bg-red-700 transition-colors"
+              <button
+                onClick={openCart}
+                className="relative p-2 hover:bg-gray-100 rounded-full transition-colors"
+                aria-label="Open cart"
               >
-                Sign In
-              </Link>
-              <Link
-                to="/signup"
-                onClick={() => setShowSignUp(true)}
-                className="hidden md:block bg-red-600 text-white px-6 py-2 rounded-lg hover:bg-red-700 transition-colors"
+                <ShoppingCart className="w-6 h-6 text-gray-700" />
+                {totalItems > 0 && (
+                  <span className="absolute top-0 right-0 bg-red-600 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                    {totalItems}
+                  </span>
+                )}
+              </button>
+
+              <button
+                onClick={() => setMobileOpen(o => !o)}
+                className="md:hidden p-2 hover:bg-gray-100 rounded-full transition-colors"
+                aria-label="Toggle mobile menu"
               >
-                Sign Up
-              </Link>
-              <button className="md:hidden p-2 hover:bg-gray-100 rounded-full transition-colors">
-                <Menu className="w-6 h-6 text-gray-700" />
+                {mobileOpen
+                  ? <X className="w-6 h-6 text-gray-700" />
+                  : <MenuIcon className="w-6 h-6 text-gray-700" />
+                }
               </button>
             </div>
           </div>
+
+          {mobileOpen && (
+            <div className="md:hidden border-t border-gray-200 py-4 flex flex-col gap-4 px-2">
+              <a href="#home" className="text-gray-700 hover:text-red-600 transition-colors">Home</a>
+              <a href="#products" className="text-gray-700 hover:text-red-600 transition-colors">Products</a>
+              <a href="#about" className="text-gray-700 hover:text-red-600 transition-colors">About</a>
+              <a href="#contact" className="text-gray-700 hover:text-red-600 transition-colors">Contact</a>
+
+            </div>
+          )}
         </div>
       </header>
+
+      <CartDrawer />
     </>
   );
 };

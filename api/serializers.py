@@ -1,6 +1,5 @@
 from rest_framework import serializers
-from .models import Product
-from .models import Cart, CartItem, Product
+from .models import Product, Cart, CartItem, Order, OrderItem
 
 
 
@@ -29,7 +28,12 @@ class DetailedProductSerializer(serializers.ModelSerializer):
 
 class CartItemSerializer(serializers.ModelSerializer):
     product_name = serializers.ReadOnlyField(source='product.name')
-    image = serializers.ReadOnlyField(source='product.image.url')
+    image = serializers.SerializerMethodField()
+
+    def get_image(self, obj):
+        if obj.product.image:
+            return obj.product.image.url
+        return None
 
     class Meta:
         model = CartItem
@@ -45,3 +49,21 @@ class CartSerializer(serializers.ModelSerializer):
 
     def get_total_price(self, obj):
         return sum(item.quantity * item.price_at_addition for item in obj.items.all())
+
+
+class OrderItemSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = OrderItem
+        fields = ['id', 'product_name', 'quantity', 'price']
+
+
+class OrderSerializer(serializers.ModelSerializer):
+    items = OrderItemSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = Order
+        fields = [
+            'id', 'status', 'total_price', 'created_at', 'items',
+            'full_name', 'email', 'address', 'city', 'postal_code',
+            'country', 'instructions', 'payment_method',
+        ]

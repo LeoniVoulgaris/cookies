@@ -1,15 +1,15 @@
 from django.shortcuts import render
-from rest_framework.decorators import api_view
-from .models import Product
-from .serializers import ProductSerializer, DetailedProductSerializer
-from rest_framework.response import Response
-from django.conf import settings
+from django.http import HttpResponse
+from django.views.decorators.csrf import csrf_exempt
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
-from .models import Product, Cart, CartItem
-from .serializers import CartSerializer
+from django.conf import settings
+import stripe
+from .models import Product, Cart, CartItem, Order, OrderItem
+from .serializers import CartSerializer, OrderSerializer
 from .utils import get_or_create_customer_from_token
+from .serializers import ProductSerializer, DetailedProductSerializer
 
 
 BASE_URL = settings.REACT_BASE_URL
@@ -86,3 +86,152 @@ def update_cart_item(request, item_id):
         return Response(CartSerializer(item.cart).data)
     except CartItem.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
+
+
+@api_view(['POST'])
+def checkout_view(request):
+    customer = get_or_create_customer_from_token(request)
+    if not customer:
+        return Response({"error": "Unauthorized"}, status=status.HTTP_401_UNAUTHORIZED)
+
+    try:
+        cart = Cart.objects.get(customer=customer, is_active=True)
+    except Cart.DoesNotExist:
+        return Response({"error": "No active cart found"}, status=status.HTTP_400_BAD_REQUEST)
+
+    if not cart.items.exists():
+        return Response({"error": "Cart is empty"}, status=status.HTTP_400_BAD_REQUEST)
+
+    total = sum(item.quantity * item.price_at_addition for item in cart.items.all())
+    order = Order.objects.create(
+        customer=customer,
+        total_price=total,
+        full_name=request.data.get('full_name', ''),
+        email=request.data.get('email', ''),
+        address=request.data.get('address', ''),
+        city=request.data.get('city', ''),
+        postal_code=request.data.get('postal_code', ''),
+        country=request.data.get('country', ''),
+        instructions=request.data.get('instructions', ''),
+        payment_method=request.data.get('payment_method', ''),
+    )
+
+    for item in cart.items.all():
+        OrderItem.objects.create(
+            order=order,
+            product=item.product,
+            product_name=item.product.name,
+            quantity=item.quantity,
+            price=item.price_at_addition,
+        )
+
+    cart.is_active = False
+    cart.save()
+
+    return Response(OrderSerializer(order).data, status=status.HTTP_201_CREATED)
+
+
+@api_view(['GET'])
+def order_detail(request, order_id):
+    customer = get_or_create_customer_from_token(request)
+    if not customer:
+        return Response({'error': 'Unauthorized'}, status=status.HTTP_401_UNAUTHORIZED)
+    try:
+        order = Order.objects.get(id=order_id, customer=customer)
+        return Response(OrderSerializer(order).data)
+    except Order.DoesNotExist:
+        return Response({'error': 'Not found'}, status=status.HTTP_404_NOT_FOUND)
+
+
+@api_view(['POST'])
+def create_stripe_checkout_session(request):
+    customer = get_or_create_customer_from_token(request)
+    if not customer:
+        return Response({'error': 'Unauthorized'}, status=status.HTTP_401_UNAUTHORIZED)
+
+    try:
+        cart = Cart.objects.get(customer=customer, is_active=True)
+    except Cart.DoesNotExist:
+        return Response({'error': 'No active cart found'}, status=status.HTTP_400_BAD_REQUEST)
+
+    if not cart.items.exists():
+        return Response({'error': 'Cart is empty'}, status=status.HTTP_400_BAD_REQUEST)
+
+    total = sum(item.quantity * item.price_at_addition for item in cart.items.all())
+    order = Order.objects.create(
+        customer=customer,
+        total_price=total,
+        status='pending',
+        full_name=request.data.get('full_name', ''),
+        email=request.data.get('email', ''),
+        address=request.data.get('address', ''),
+        city=request.data.get('city', ''),
+        postal_code=request.data.get('postal_code', ''),
+        country=request.data.get('country', ''),
+        instructions=request.data.get('instructions', ''),
+        payment_method='card',
+    )
+
+    for item in cart.items.all():
+        OrderItem.objects.create(
+            order=order,
+            product=item.product,
+            product_name=item.product.name,
+            quantity=item.quantity,
+            price=item.price_at_addition,
+        )
+
+    cart.is_active = False
+    cart.save()
+
+    stripe.api_key = settings.STRIPE_SECRET_KEY
+
+    line_items = [
+        {
+            'price_data': {
+                'currency': 'usd',
+                'product_data': {'name': item.product_name},
+                'unit_amount': int(item.price * 100),
+            },
+            'quantity': item.quantity,
+        }
+        for item in order.items.all()
+    ]
+
+    session = stripe.checkout.Session.create(
+        payment_method_types=['card'],
+        line_items=line_items,
+        mode='payment',
+        customer_email=order.email or None,
+        metadata={'order_id': order.id},
+        success_url=f"{BASE_URL}/checkout?stripe_success=true&order_id={order.id}",
+        cancel_url=f"{BASE_URL}/checkout",
+    )
+
+    return Response({'url': session.url})
+
+
+@csrf_exempt
+def stripe_webhook(request):
+    payload = request.body
+    sig_header = request.META.get('HTTP_STRIPE_SIGNATURE')
+
+    try:
+        event = stripe.Webhook.construct_event(
+            payload, sig_header, settings.STRIPE_WEBHOOK_SECRET
+        )
+    except (ValueError, stripe.error.SignatureVerificationError):
+        return HttpResponse(status=400)
+
+    if event['type'] == 'checkout.session.completed':
+        session = event['data']['object']
+        order_id = session.get('metadata', {}).get('order_id')
+        if order_id:
+            try:
+                order = Order.objects.get(id=order_id)
+                order.status = 'confirmed'
+                order.save()
+            except Order.DoesNotExist:
+                pass
+
+    return HttpResponse(status=200)

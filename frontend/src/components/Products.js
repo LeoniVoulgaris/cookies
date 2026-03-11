@@ -11,7 +11,7 @@ import { useCart } from '../context/CartContext';
 export default function Products() {
   const { slug } = useParams();
   const navigate = useNavigate();
-  const { addToCart } = useCart();
+  const { addToCart, openCart } = useCart();
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -41,7 +41,7 @@ export default function Products() {
   const handleBack = () => navigate('/');
   const handleProductClick = newSlug => navigate(`/product/${newSlug}/`);
   const handleAddToCart = () => addToCart(product.id, quantity);
-  const handleBuyNow = () => console.log(`Buy now: ${quantity} of ${product?.name}`);
+  const handleBuyNow = () => { addToCart(product.id, quantity); openCart(); };
 
   if (loading) {
     return (
@@ -69,10 +69,7 @@ export default function Products() {
 
  return (
     <div className="min-h-screen bg-white">
-      {/* Header */}
-      <header className="bg-white border-b border-gray-200 sticky top-0 z-50">
-        < NavBar/>
-      </header>
+      <NavBar />
 
       {/* Product Detail */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">

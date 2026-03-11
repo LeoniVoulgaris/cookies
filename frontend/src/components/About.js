@@ -10,7 +10,14 @@ const About = () => {
             <div className="space-y-6">
               <h2 className="text-4xl text-gray-900">Baked with Love Since 2020</h2>
               <p className="text-gray-600 text-lg">
-                At Posted Cookies, we believe every cookie should bring a smile to your face. Our journey began in a small home kitchen with a passion for creating the perfect cookie.
+                Posted Cookies began with a simple obsession: thick, gooey cookies done properly.
+
+
+
+From our South London micro-bakery, we craft gourmand cookie boxes designed to feel like a little luxury; whether you’re gifting, sharing, or keeping them to yourself.
+Each cookie is handmade in small batches, thoughtfully packaged, and posted with care.
+We offer a selection of classic cookie flavours and a new limited-edition flavour every month. All flavours are inspired by indulgence, nostalgia, and comfort.
+Baked locally. Posted nationally.
               </p>
               <p className="text-gray-600 text-lg">
                 Today, we use only the finest ingredients - real butter, premium chocolate, and our grandmother's secret vanilla blend - to craft cookies that taste just like homemade.

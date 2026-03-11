@@ -3,11 +3,13 @@ import { ShoppingCart, Star } from 'lucide-react';
 import { ImageWithFallback } from '../layouts/ImageWithFallback';
 import api from '../api';
 import { Link } from 'react-router-dom';
+import { useCart } from '../context/CartContext';
 
 const Menu = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const { addToCart, openCart } = useCart();
 
   useEffect(() => {
     api.get('products/')
@@ -61,7 +63,7 @@ const Menu = () => {
                   <span className="text-red-600">{product.price}</span>
 
                   <button
-                    onClick={(e) => e.preventDefault()}
+                    onClick={(e) => { e.preventDefault(); addToCart(product.id); openCart(); }}
                     className="bg-red-600 text-white p-2 rounded-lg hover:bg-red-700 transition-colors"
                   >
                     <ShoppingCart className="w-5 h-5" />

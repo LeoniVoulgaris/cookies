@@ -47,17 +47,9 @@ export const AuthContextProvider = ({ children }) => {
     }
   };
 
-  // Restore session on app load + listen for changes
+  // Restore session on app load + listen for changes.
+  // If no session exists, sign in anonymously so every visitor can use the cart.
   useEffect(() => {
-    const loadSession = async () => {
-      const { data } = await supabase.auth.getSession();
-      setSession(data.session);
-      setUser(data.session?.user ?? null);
-      setLoading(false);
-    };
-
-    loadSession();
-
     const { data: subscription } = supabase.auth.onAuthStateChange(
       (_event, session) => {
         setSession(session);
@@ -65,6 +57,12 @@ export const AuthContextProvider = ({ children }) => {
         setLoading(false);
       }
     );
+
+    supabase.auth.getSession().then(({ data }) => {
+      if (!data.session) {
+        supabase.auth.signInAnonymously();
+      }
+    });
 
     return () => subscription.subscription.unsubscribe();
   }, []);
