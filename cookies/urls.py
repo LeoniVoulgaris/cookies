@@ -9,6 +9,5 @@ urlpatterns = [
     path('', include('frontend.urls'))  # Include the API URLs
 ]
 
-# Serve media files in development
-if settings.DEBUG:
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+# Always serve media files (product images uploaded via admin)
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
