@@ -116,13 +116,13 @@ const Checkout = () => {
               {order.items.map(item => (
                 <li key={item.id} className="py-3 flex justify-between">
                   <span className="text-gray-700">{item.product_name} × {item.quantity}</span>
-                  <span className="text-gray-900">${(Number(item.price) * item.quantity).toFixed(2)}</span>
+                  <span className="text-gray-900">£{(Number(item.price) * item.quantity).toFixed(2)}</span>
                 </li>
               ))}
             </ul>
             <div className="flex justify-between pt-4 border-t border-gray-200 mt-2">
               <span className="text-gray-900 font-medium">Total</span>
-              <span className="text-red-600 text-xl">${Number(order.total_price).toFixed(2)}</span>
+              <span className="text-red-600 text-xl">£{Number(order.total_price).toFixed(2)}</span>
             </div>
             <div className="mt-4 pt-4 border-t border-gray-200 text-sm text-gray-600 text-left">
               <p>
@@ -332,7 +332,7 @@ const Checkout = () => {
                       {item.product_name} × {item.quantity}
                     </span>
                     <span className="text-gray-900">
-                      ${(Number(item.price_at_addition) * item.quantity).toFixed(2)}
+                      £{(Number(item.price_at_addition) * item.quantity).toFixed(2)}
                     </span>
                   </li>
                 ))}
@@ -340,7 +340,7 @@ const Checkout = () => {
               <div className="border-t border-gray-200 pt-4 space-y-2 text-sm">
                 <div className="flex justify-between text-gray-600">
                   <span>Subtotal</span>
-                  <span>${Number(totalPrice).toFixed(2)}</span>
+                  <span>£{Number(totalPrice).toFixed(2)}</span>
                 </div>
                 <div className="flex justify-between text-gray-600">
                   <span>Shipping</span>
@@ -348,7 +348,7 @@ const Checkout = () => {
                 </div>
                 <div className="flex justify-between text-gray-900 font-medium text-base pt-2 border-t border-gray-200">
                   <span>Total</span>
-                  <span className="text-red-600">${Number(totalPrice).toFixed(2)}</span>
+                  <span className="text-red-600">£{Number(totalPrice).toFixed(2)}</span>
                 </div>
               </div>
               {error && <p className="text-red-600 text-sm">{error}</p>}

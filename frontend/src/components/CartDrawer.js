@@ -63,7 +63,7 @@ const CartDrawer = () => {
                   )}
                   <div className="flex-1 min-w-0">
                     <p className="text-gray-900 font-medium truncate">{item.product_name}</p>
-                    <p className="text-red-600 text-sm">${Number(item.price_at_addition).toFixed(2)} each</p>
+                    <p className="text-red-600 text-sm">£{Number(item.price_at_addition).toFixed(2)} each</p>
                     <div className="flex items-center gap-2 mt-2">
                       <button
                         onClick={() => updateQuantity(item.id, item.quantity - 1)}
@@ -91,7 +91,7 @@ const CartDrawer = () => {
                       <Trash2 className="w-4 h-4 text-red-400" />
                     </button>
                     <p className="text-gray-900 font-medium">
-                      ${(Number(item.price_at_addition) * item.quantity).toFixed(2)}
+                      £{(Number(item.price_at_addition) * item.quantity).toFixed(2)}
                     </p>
                   </div>
                 </li>
@@ -105,7 +105,7 @@ const CartDrawer = () => {
           <div className="border-t border-gray-200 px-6 py-4 space-y-3">
             <div className="flex justify-between items-center">
               <span className="text-gray-700">Total</span>
-              <span className="text-2xl text-red-600">${Number(totalPrice).toFixed(2)}</span>
+              <span className="text-2xl text-red-600">£{Number(totalPrice).toFixed(2)}</span>
             </div>
             <button
               onClick={handleCheckout}

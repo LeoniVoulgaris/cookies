@@ -51,16 +51,12 @@ const Menu = () => {
               </div>
 
               <div className="p-6">
-                <div className="flex items-center gap-1 mb-2">
-                  {[...Array(product.rating)].map((_, i) => (
-                    <Star key={i} className="w-4 h-4 fill-red-600 text-red-600" />
-                  ))}
-                </div>
+
 
                 <h3 className="text-gray-900 mb-2">{product.name}</h3>
 
                 <div className="flex justify-between items-center">
-                  <span className="text-red-600">{product.price}</span>
+                  <span className="text-red-600">£{Number(product.price).toFixed(2)}</span>
 
                   <button
                     onClick={(e) => { e.preventDefault(); addToCart(product.id); openCart(); }}

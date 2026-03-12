@@ -19,9 +19,7 @@ Each cookie is handmade in small batches, thoughtfully packaged, and posted with
 We offer a selection of classic cookie flavours and a new limited-edition flavour every month. All flavours are inspired by indulgence, nostalgia, and comfort.
 Baked locally. Posted nationally.
               </p>
-              <p className="text-gray-600 text-lg">
-                Today, we use only the finest ingredients - real butter, premium chocolate, and our grandmother's secret vanilla blend - to craft cookies that taste just like homemade.
-              </p>
+
               <div className="grid grid-cols-3 gap-6 pt-6">
                 <div className="text-center">
                   <div className="text-4xl text-red-600 mb-2">1000+</div>

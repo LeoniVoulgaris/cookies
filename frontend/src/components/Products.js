@@ -89,11 +89,6 @@ export default function Products() {
             {/* Product Info */}
             <div className="flex flex-col">
               <div className="mb-4">
-                {product.category && (
-                  <span className="inline-block bg-red-100 text-red-600 px-3 py-1 rounded-full text-sm mb-2">
-                    {product.category.charAt(0).toUpperCase() + product.category.slice(1)}
-                  </span>
-                )}
                 <h2 className="text-3xl lg:text-4xl text-gray-900 mb-2">{product.name}</h2>
               </div>
 
@@ -101,7 +96,7 @@ export default function Products() {
 
               <div className="mb-6">
                 <div className="flex items-center justify-between mb-4">
-                  <span className="text-4xl text-red-600">${Number(product.price).toFixed(2)}</span>
+                  <span className="text-4xl text-red-600">£{Number(product.price).toFixed(2)}</span>
                   <div className="flex items-center gap-2 text-green-600">
                     <Truck className="w-5 h-5" />
                     <span>In Stock</span>
@@ -180,7 +175,7 @@ export default function Products() {
                     </div>
                     <div className="flex-1 min-w-0">
                       <p className="text-gray-900 truncate">{similarProduct.name}</p>
-                      <p className="text-red-600">${Number(similarProduct.price).toFixed(2)}</p>
+                      <p className="text-red-600">£{Number(similarProduct.price).toFixed(2)}</p>
                     </div>
                     <ArrowRight className="w-5 h-5 text-gray-400 flex-shrink-0" />
                   </button>

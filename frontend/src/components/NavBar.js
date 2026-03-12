@@ -3,12 +3,24 @@ import React, { useState } from "react";
 import { Cookie, ShoppingCart, Menu as MenuIcon, X } from "lucide-react";
 import { useCart } from "../context/CartContext";
 import CartDrawer from "./CartDrawer";
+import { useNavigate } from "react-router-dom";
 
 const NavBar = () => {
   const { cart, openCart } = useCart();
   const [mobileOpen, setMobileOpen] = useState(false);
+  const navigate = useNavigate();
 
   const totalItems = cart?.items?.reduce((acc, item) => acc + item.quantity, 0) ?? 0;
+
+  const scrollToSection = (id) => {
+    setMobileOpen(false);
+    const el = document.getElementById(id);
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth' });
+    } else {
+      navigate('/', { state: { scrollTo: id } });
+    }
+  };
 
   return (
     <>
@@ -21,10 +33,10 @@ const NavBar = () => {
             </div>
 
             <nav className="hidden md:flex items-center gap-8">
-              <a href="#home" className="text-gray-700 hover:text-red-600 transition-colors">Home</a>
-              <a href="#products" className="text-gray-700 hover:text-red-600 transition-colors">Products</a>
-              <a href="#about" className="text-gray-700 hover:text-red-600 transition-colors">About</a>
-              <a href="#contact" className="text-gray-700 hover:text-red-600 transition-colors">Contact</a>
+              <button onClick={() => scrollToSection('home')} className="text-gray-700 hover:text-red-600 transition-colors">Home</button>
+              <button onClick={() => scrollToSection('products')} className="text-gray-700 hover:text-red-600 transition-colors">Products</button>
+              <button onClick={() => scrollToSection('about')} className="text-gray-700 hover:text-red-600 transition-colors">About</button>
+              <button onClick={() => scrollToSection('contact')} className="text-gray-700 hover:text-red-600 transition-colors">Contact</button>
             </nav>
 
             <div className="flex items-center gap-4">
@@ -56,11 +68,10 @@ const NavBar = () => {
 
           {mobileOpen && (
             <div className="md:hidden border-t border-gray-200 py-4 flex flex-col gap-4 px-2">
-              <a href="#home" className="text-gray-700 hover:text-red-600 transition-colors">Home</a>
-              <a href="#products" className="text-gray-700 hover:text-red-600 transition-colors">Products</a>
-              <a href="#about" className="text-gray-700 hover:text-red-600 transition-colors">About</a>
-              <a href="#contact" className="text-gray-700 hover:text-red-600 transition-colors">Contact</a>
-
+              <button onClick={() => scrollToSection('home')} className="text-gray-700 hover:text-red-600 transition-colors text-left">Home</button>
+              <button onClick={() => scrollToSection('products')} className="text-gray-700 hover:text-red-600 transition-colors text-left">Products</button>
+              <button onClick={() => scrollToSection('about')} className="text-gray-700 hover:text-red-600 transition-colors text-left">About</button>
+              <button onClick={() => scrollToSection('contact')} className="text-gray-700 hover:text-red-600 transition-colors text-left">Contact</button>
             </div>
           )}
         </div>

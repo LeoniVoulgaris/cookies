@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import NavBar from "./NavBar";
 import Footer from "./Footer";
 import Hero from "./Hero";
@@ -10,6 +11,7 @@ import api from "../api";
 const HomePage = () => {
 
   const [products, setProducts] = React.useState([]);
+  const location = useLocation();
 
   useEffect(() => {
     api.get("products")
@@ -21,6 +23,13 @@ const HomePage = () => {
         console.error(err.message);
       });
   }, []);
+
+  useEffect(() => {
+    if (location.state?.scrollTo) {
+      const el = document.getElementById(location.state.scrollTo);
+      if (el) setTimeout(() => el.scrollIntoView({ behavior: 'smooth' }), 100);
+    }
+  }, [location.state]);
 
   return (
     <>

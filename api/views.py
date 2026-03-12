@@ -189,7 +189,7 @@ def create_stripe_checkout_session(request):
     line_items = [
         {
             'price_data': {
-                'currency': 'usd',
+                'currency': 'gbp',
                 'product_data': {'name': item.product_name},
                 'unit_amount': int(item.price * 100),
             },
