@@ -8,7 +8,7 @@ from .models import Product, Cart, CartItem, Order, OrderItem
 class ProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
-        fields = ['id','name','slug','image','description','price']
+        fields = ['id','name','slug','image','description','price','category']
 
 
 
@@ -16,13 +16,15 @@ class DetailedProductSerializer(serializers.ModelSerializer):
     similar_products = serializers.SerializerMethodField()
     class Meta:
         model = Product
-        fields = ['id', 'name', 'price', 'slug', 'image', 'description', 'similar_products']
+        fields = ['id', 'name', 'price', 'slug', 'image', 'description', 'category', 'similar_products']
 
 
     def get_similar_products(self, product):
-        products = Product.objects.filter(category=product.category).exclude(id=product.id)
+        if product.category == 'box':
+            products = Product.objects.filter(category='box').exclude(id=product.id)
+        else:
+            products = Product.objects.filter(category__in=['classic', 'limited']).exclude(id=product.id)
         serializer = ProductSerializer(products, many=True)
-
         return serializer.data
 
 
@@ -37,7 +39,7 @@ class CartItemSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CartItem
-        fields = ['id', 'product', 'product_name', 'image', 'quantity', 'price_at_addition']
+        fields = ['id', 'product', 'product_name', 'image', 'quantity', 'price_at_addition', 'customisation']
 
 class CartSerializer(serializers.ModelSerializer):
     items = CartItemSerializer(many=True, read_only=True)

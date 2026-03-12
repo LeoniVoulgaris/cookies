@@ -63,6 +63,15 @@ const CartDrawer = () => {
                   )}
                   <div className="flex-1 min-w-0">
                     <p className="text-gray-900 font-medium truncate">{item.product_name}</p>
+                    {item.customisation?.flavours && (
+                      <ul className="text-xs text-gray-500 mt-0.5 space-y-0">
+                        {Object.entries(item.customisation.flavours)
+                          .filter(([, q]) => q > 0)
+                          .map(([name, q]) => (
+                            <li key={name}>{q}× {name}</li>
+                          ))}
+                      </ul>
+                    )}
                     <p className="text-red-600 text-sm">£{Number(item.price_at_addition).toFixed(2)} each</p>
                     <div className="flex items-center gap-2 mt-2">
                       <button

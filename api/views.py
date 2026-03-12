@@ -43,20 +43,25 @@ def cart_view(request):
     elif request.method == 'POST':
         product_id = request.data.get('product_id')
         quantity = int(request.data.get('quantity', 1))
+        customisation = request.data.get('customisation', None)
 
         try:
             product = Product.objects.get(id=product_id)
-            # Use get_or_create to avoid duplicate lines for the same product
             item, created = CartItem.objects.get_or_create(
                 cart=cart,
                 product=product,
-                defaults={'price_at_addition': product.price} # Set price from DB
+                defaults={'price_at_addition': product.price}
             )
 
-            if not created:
-                item.quantity += quantity
-            else:
+            if customisation is not None:
+                # Box with customisation: replace quantity and flavour selection
                 item.quantity = quantity
+                item.customisation = customisation
+            else:
+                if not created:
+                    item.quantity += quantity
+                else:
+                    item.quantity = quantity
 
             item.save()
             return Response(CartSerializer(cart).data)

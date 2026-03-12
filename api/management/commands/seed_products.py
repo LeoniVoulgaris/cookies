@@ -6,6 +6,7 @@ PRODUCTS = [
     {
         'name': 'Classic Cookie Box',
         'price': '17.00',
+        'category': 'box',
         'image': 'img/Chocolate.png',
         'description': (
             'A box of 6 of our classic cookie flavours.\n\n'
@@ -20,6 +21,7 @@ PRODUCTS = [
     {
         'name': 'Mixed Cookie Box',
         'price': '20.00',
+        'category': 'box',
         'image': '',
         'description': (
             'A box of 6 mixed cookie flavours - 3 of our classic cookie flavours '
@@ -36,6 +38,7 @@ PRODUCTS = [
     {
         'name': 'Limited Cookie Box',
         'price': '22.00',
+        'category': 'box',
         'image': '',
         'description': (
             'A box of 6 of our limited cookie flavours.\n\n'
@@ -50,6 +53,7 @@ PRODUCTS = [
     {
         'name': 'Milk Chocolate Chip Cookie',
         'price': '0.00',
+        'category': 'classic',
         'image': 'img/Chocolate.png',
         'description': (
             'Thick Belgian milk chocolate chip cookie.\n\n'
@@ -66,6 +70,7 @@ PRODUCTS = [
     {
         'name': 'White Chocolate Chip Cookie',
         'price': '0.00',
+        'category': 'classic',
         'image': 'img/WhiteChocolate.png',
         'description': (
             'Thick Belgian white chocolate chip cookie.\n\n'
@@ -82,6 +87,7 @@ PRODUCTS = [
     {
         'name': 'Red Velvet Cookie',
         'price': '0.00',
+        'category': 'classic',
         'image': 'img/RedVelvet.png',
         'description': (
             'Thick Red Velvet cookie with rich, Belgian white chocolate chips.\n\n'
@@ -98,6 +104,7 @@ PRODUCTS = [
     {
         'name': 'Mini Eggs Loaded Cookie',
         'price': '0.00',
+        'category': 'limited',
         'image': '',
         'description': (
             'Thick cookie loaded with whole mini eggs.\n\n'
@@ -114,6 +121,7 @@ PRODUCTS = [
     {
         'name': 'Cream Egg Stuffed Cookie',
         'price': '0.00',
+        'category': 'limited',
         'image': '',
         'description': (
             'Thick cookie stuffed with a whole cream egg.\n\n'
@@ -145,6 +153,7 @@ class Command(BaseCommand):
                 name=data['name'],
                 defaults={
                     'price': data['price'],
+                    'category': data['category'],
                     'description': data['description'],
                 },
             )

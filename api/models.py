@@ -6,9 +6,9 @@ import uuid
 
 class Product(models.Model):
     CATEGORY_CHOICES = [
-        ('snack', 'Snack'),
-        ('beverage', 'Beverage'),
-        ('dessert', 'Dessert'),
+        ('box', 'Cookie Box'),
+        ('classic', 'Classic Cookie'),
+        ('limited', 'Limited Cookie'),
     ]
 
     name = models.CharField(max_length=100, unique=True)
@@ -16,7 +16,7 @@ class Product(models.Model):
     image = models.ImageField(upload_to="img", null=True, blank=True)
     description = models.TextField(blank=True, null=True)
     price = models.DecimalField(max_digits=10, decimal_places=2)
-    category = models.CharField(max_length=20, choices=CATEGORY_CHOICES, default='snack')
+    category = models.CharField(max_length=20, choices=CATEGORY_CHOICES, default='box')
 
     def __str__(self):
         return self.name
@@ -67,6 +67,7 @@ class CartItem(models.Model):
     quantity = models.PositiveIntegerField(default=1)
     # price_at_addition ensures the price doesn't change for the user if you update the Product price later
     price_at_addition = models.DecimalField(max_digits=10, decimal_places=2)
+    customisation = models.JSONField(null=True, blank=True)
 
     class Meta:
         # Prevents the same product being added as multiple rows in the same cart

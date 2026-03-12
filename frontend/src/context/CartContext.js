@@ -29,10 +29,12 @@ export const CartProvider = ({ children }) => {
         setLoading(false);
     };
 
-    const addToCart = async (productId, quantity = 1) => {
+    const addToCart = async (productId, quantity = 1, customisation = null) => {
+        const body = { product_id: productId, quantity };
+        if (customisation) body.customisation = customisation;
         const data = await fetchWithAuth('/api/cart/', {
             method: 'POST',
-            body: JSON.stringify({ product_id: productId, quantity }),
+            body: JSON.stringify(body),
         });
         if (data) setCart(data);
     };
