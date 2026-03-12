@@ -6,13 +6,7 @@ const MenuCard = ({ products = [] }) => {
   const fallbackImg = "https://via.placeholder.com/300x200?text=No+Image";
   const getImageUrl = (product) => {
     if (product.img) return product.img;
-    if (product.image) {
-      // If image path starts with /media/, prepend host
-      if (product.image.startsWith('/media/')) {
-        return `http://127.0.0.1:8000${product.image}`;
-      }
-      return product.image;
-    }
+    if (product.image) return product.image;
     return fallbackImg;
   };
   return (

@@ -79,7 +79,7 @@ export default function Products() {
             <div className="relative">
               <div className="aspect-square rounded-xl overflow-hidden bg-gray-100">
                 <img
-                  src={product.image ? `http://127.0.0.1:8000${product.image}` : "https://via.placeholder.com/600x600?text=No+Image"}
+                  src={product.image || "https://via.placeholder.com/600x600?text=No+Image"}
                   alt={product.name}
                   className="w-full h-full object-cover transition-transform duration-500 hover:scale-110"
                 />
@@ -173,7 +173,7 @@ export default function Products() {
                   >
                     <div className="w-16 h-16 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
                       <img
-                        src={similarProduct.image ? `http://127.0.0.1:8000${similarProduct.image}` : "https://via.placeholder.com/150x150?text=No+Image"}
+                        src={similarProduct.image || "https://via.placeholder.com/150x150?text=No+Image"}
                         alt={similarProduct.name}
                         className="w-full h-full object-cover transition-transform duration-300 hover:scale-110"
                       />
