@@ -32,6 +32,9 @@ _allowed = ["cookies-0ebg.onrender.com", "localhost", "127.0.0.1"]
 _extra = os.getenv('EXTRA_ALLOWED_HOST')
 if _extra:
     _allowed.append(_extra)
+    # Also allow bare domain if extra host starts with www.
+    if _extra.startswith('www.'):
+        _allowed.append(_extra[4:])
 ALLOWED_HOSTS = _allowed
 
 
@@ -72,6 +75,8 @@ else:
     _extra_cors = os.getenv('EXTRA_ALLOWED_HOST')
     if _extra_cors:
         _cors.append(f"https://{_extra_cors}")
+        if _extra_cors.startswith('www.'):
+            _cors.append(f"https://{_extra_cors[4:]}")
     CORS_ALLOWED_ORIGINS = _cors
 
 ROOT_URLCONF = 'cookies.urls'
