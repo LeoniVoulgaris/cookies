@@ -1,2 +1,20 @@
 @import './tailwind.css';
 @import './theme.css';
+
+/* ── Posted Cookies brand palette ─────────────────────────────────────────
+   Overrides Tailwind's red-* scale with warm chocolate / caramel tones
+   derived from the logo. Every red-* class site-wide picks these up.
+──────────────────────────────────────────────────────────────────────── */
+@theme {
+  --color-red-50:  #FDF4EA;
+  --color-red-100: #F5DFC0;
+  --color-red-200: #E8C090;
+  --color-red-300: #D4A060;
+  --color-red-400: #C08040;
+  --color-red-500: #A86020;
+  --color-red-600: #8B4513;
+  --color-red-700: #6B320F;
+  --color-red-800: #4A210A;
+  --color-red-900: #2C1405;
+  --color-red-950: #1A0C03;
+}
