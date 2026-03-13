@@ -4,6 +4,8 @@ from .views import index
 urlpatterns = [
     path('', index),
     path('products', index),
+    path('checkout', index),
+    path('checkout/', index),
     path('signup', index),
     path('signin', index),
     # Add a path for product/slug
