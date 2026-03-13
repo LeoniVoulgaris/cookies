@@ -1,6 +1,6 @@
 import React from "react";
-import img from "../assets/img/heroNew.png";
 
+import tower from "../assets/img/tower.png";
 import { ShoppingCart, Star } from "lucide-react";
 import {ImageWithFallback} from "../layouts/ImageWithFallback";
 
@@ -41,21 +41,12 @@ const Hero = () => {
             <div className="relative">
               <div className="aspect-square rounded-2xl overflow-hidden shadow-2xl">
                 <ImageWithFallback
-                  src="https://images.unsplash.com/photo-1610698501974-0f18588d6c2c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxiYWtlcnklMjBjb29raWVzJTIwdGFibGV8ZW58MXx8fHwxNzY3MTIyMjI3fDA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral"
+                  src={tower}
                   alt="Fresh baked cookies"
                   className="w-full h-full object-cover"
                 />
               </div>
-              <div className="absolute -bottom-6 -right-6 bg-white p-6 rounded-xl shadow-xl border-4 border-red-600">
-                <div className="flex items-center gap-2 mb-2">
-                  <Star className="w-5 h-5 fill-red-600 text-red-600" />
-                  <Star className="w-5 h-5 fill-red-600 text-red-600" />
-                  <Star className="w-5 h-5 fill-red-600 text-red-600" />
-                  <Star className="w-5 h-5 fill-red-600 text-red-600" />
-                  <Star className="w-5 h-5 fill-red-600 text-red-600" />
-                </div>
-                <p className="text-sm">Rated 5/5 by our customers</p>
-              </div>
+
             </div>
           </div>
         </div>
