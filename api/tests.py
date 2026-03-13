@@ -75,3 +75,4 @@ class CheckoutFlowTests(TestCase):
 		order = Order.objects.get(id=response.data['id'])
 		self.assertEqual(order.address, '123 Cookie Street')
 		self.assertEqual(order.payment_method, 'cash_on_delivery')
+		self.assertEqual(order.total_price, Decimal('21.45'))

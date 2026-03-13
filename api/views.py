@@ -6,6 +6,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import AllowAny
 from django.conf import settings
+from decimal import Decimal
 import stripe
 from .models import Product, Cart, CartItem, Order, OrderItem
 from .serializers import CartSerializer, OrderSerializer
@@ -14,6 +15,7 @@ from .serializers import ProductSerializer, DetailedProductSerializer
 
 
 BASE_URL = settings.REACT_BASE_URL
+SHIPPING_FEE = Decimal('4.45')
 
 
 def _save_customer_shipping_details(customer, data):
@@ -138,7 +140,8 @@ def checkout_view(request):
 
     _save_customer_shipping_details(customer, request.data)
 
-    total = sum(item.quantity * item.price_at_addition for item in cart.items.all())
+    subtotal = sum(item.quantity * item.price_at_addition for item in cart.items.all())
+    total = subtotal + SHIPPING_FEE
     order = Order.objects.create(
         customer=customer,
         total_price=total,
@@ -200,7 +203,8 @@ def create_stripe_checkout_session(request):
 
     _save_customer_shipping_details(customer, request.data)
 
-    total = sum(item.quantity * item.price_at_addition for item in cart.items.all())
+    subtotal = sum(item.quantity * item.price_at_addition for item in cart.items.all())
+    total = subtotal + SHIPPING_FEE
     order = Order.objects.create(
         customer=customer,
         total_price=total,
@@ -240,6 +244,17 @@ def create_stripe_checkout_session(request):
         }
         for item in order.items.all()
     ]
+
+    line_items.append(
+        {
+            'price_data': {
+                'currency': 'gbp',
+                'product_data': {'name': 'Shipping'},
+                'unit_amount': int(SHIPPING_FEE * 100),
+            },
+            'quantity': 1,
+        }
+    )
 
     session = stripe.checkout.Session.create(
         payment_method_types=['card'],

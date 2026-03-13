@@ -43,6 +43,10 @@ const Checkout = () => {
 
   const items = cart?.items ?? [];
   const totalPrice = cart?.total_price ?? '0.00';
+  const SHIPPING_FEE = 4.45;
+  const subtotal = Number(totalPrice);
+  const shipping = items.length > 0 ? SHIPPING_FEE : 0;
+  const grandTotal = subtotal + shipping;
 
   const handleChange = e => setForm(f => ({ ...f, [e.target.name]: e.target.value }));
 
@@ -112,6 +116,11 @@ const Checkout = () => {
               <Package className="w-5 h-5 text-red-600" />
               Order Summary
             </h2>
+            {(() => {
+              const itemSubtotal = order.items.reduce((sum, item) => sum + (Number(item.price) * item.quantity), 0);
+              const shippingAmount = Math.max(0, Number(order.total_price) - itemSubtotal);
+              return (
+                <>
             <ul className="divide-y divide-gray-200">
               {order.items.map(item => (
                 <li key={item.id} className="py-3 flex justify-between">
@@ -120,10 +129,21 @@ const Checkout = () => {
                 </li>
               ))}
             </ul>
+            <div className="flex justify-between pt-4 text-gray-600">
+              <span>Subtotal</span>
+              <span>£{itemSubtotal.toFixed(2)}</span>
+            </div>
+            <div className="flex justify-between pt-2 text-gray-600">
+              <span>Shipping</span>
+              <span>£{shippingAmount.toFixed(2)}</span>
+            </div>
             <div className="flex justify-between pt-4 border-t border-gray-200 mt-2">
               <span className="text-gray-900 font-medium">Total</span>
               <span className="text-red-600 text-xl">£{Number(order.total_price).toFixed(2)}</span>
             </div>
+                </>
+              );
+            })()}
             <div className="mt-4 pt-4 border-t border-gray-200 text-sm text-gray-600 text-left">
               <p>
                 <span className="font-medium">Delivery to: </span>
@@ -340,15 +360,15 @@ const Checkout = () => {
               <div className="border-t border-gray-200 pt-4 space-y-2 text-sm">
                 <div className="flex justify-between text-gray-600">
                   <span>Subtotal</span>
-                  <span>£{Number(totalPrice).toFixed(2)}</span>
+                  <span>£{subtotal.toFixed(2)}</span>
                 </div>
                 <div className="flex justify-between text-gray-600">
                   <span>Shipping</span>
-                  <span className="text-green-600">Free</span>
+                  <span>£{shipping.toFixed(2)}</span>
                 </div>
                 <div className="flex justify-between text-gray-900 font-medium text-base pt-2 border-t border-gray-200">
                   <span>Total</span>
-                  <span className="text-red-600">£{Number(totalPrice).toFixed(2)}</span>
+                  <span className="text-red-600">£{grandTotal.toFixed(2)}</span>
                 </div>
               </div>
               {error && <p className="text-red-600 text-sm">{error}</p>}
