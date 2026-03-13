@@ -1,7 +1,7 @@
 // Products.js
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
-import { Cookie, ShoppingCart, Truck, Minus, Plus, ArrowLeft, ArrowRight, Sparkles } from 'lucide-react';
+import { Cookie, ShoppingCart, Truck, Minus, Plus, ArrowLeft, ArrowRight, Sparkles, X } from 'lucide-react';
 import api from '../api';
 import NavBar from './NavBar';
 import { useCart } from '../context/CartContext';
@@ -25,8 +25,25 @@ const getBoxConfig = (name) => {
   return null;
 };
 
+const buildDefaultSelections = (boxConfig, cookieProducts) => {
+  const defaults = {};
+  boxConfig.forEach(group => {
+    const available = cookieProducts.filter(p => p.category === group.category);
+    if (available.length === 0) return;
+
+    const base = Math.floor(group.slots / available.length);
+    const remainder = group.slots % available.length;
+
+    available.forEach((cookie, index) => {
+      const amount = base + (index < remainder ? 1 : 0);
+      defaults[cookie.name] = (defaults[cookie.name] || 0) + amount;
+    });
+  });
+  return defaults;
+};
+
 // ----- Flavour picker sub-component -------------------------------------
-const FlavourGroup = ({ group, cookieProducts, selections, setSelections }) => {
+const FlavourGroup = ({ group, cookieProducts, selections, setSelections, onOpenFlavour }) => {
   const available = cookieProducts.filter(p => p.category === group.category);
   const groupTotal = available.reduce((sum, p) => sum + (selections[p.name] || 0), 0);
   const filled = groupTotal === group.slots;
@@ -57,6 +74,15 @@ const FlavourGroup = ({ group, cookieProducts, selections, setSelections }) => {
           return (
             <div
               key={cookie.id}
+              role="button"
+              tabIndex={0}
+              onClick={() => onOpenFlavour(cookie)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  e.preventDefault();
+                  onOpenFlavour(cookie);
+                }
+              }}
               className={`flex items-center gap-3 p-3 rounded-xl border transition-colors ${count > 0 ? 'border-red-400 bg-red-50' : 'border-gray-200 bg-white'}`}
             >
               <div className="w-12 h-12 flex-shrink-0 rounded-lg overflow-hidden bg-gray-100">
@@ -68,7 +94,10 @@ const FlavourGroup = ({ group, cookieProducts, selections, setSelections }) => {
               <div className="flex items-center gap-1 flex-shrink-0">
                 <button
                   type="button"
-                  onClick={() => adjust(cookie.name, -1)}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    adjust(cookie.name, -1);
+                  }}
                   className="p-1 rounded-full hover:bg-gray-200 transition-colors disabled:opacity-30"
                   disabled={count === 0}
                 >
@@ -77,7 +106,10 @@ const FlavourGroup = ({ group, cookieProducts, selections, setSelections }) => {
                 <span className="w-6 text-center text-sm font-medium text-gray-900">{count}</span>
                 <button
                   type="button"
-                  onClick={() => adjust(cookie.name, 1)}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    adjust(cookie.name, 1);
+                  }}
                   className="p-1 rounded-full hover:bg-gray-200 transition-colors disabled:opacity-30"
                   disabled={groupTotal >= group.slots}
                 >
@@ -103,11 +135,14 @@ export default function Products() {
   const [quantity, setQuantity] = useState(1);
   const [selections, setSelections] = useState({});
   const [cookieProducts, setCookieProducts] = useState([]);
+  const [selectedFlavour, setSelectedFlavour] = useState(null);
 
   useEffect(() => {
     if (!slug) return;
     setLoading(true);
     setError(null);
+    setSelections({});
+    setSelectedFlavour(null);
     api.get(`products_detail/${slug}/`)
       .then(res => {
         setProduct(res.data);
@@ -129,6 +164,13 @@ export default function Products() {
   }, [product]);
 
   const boxConfig = product ? getBoxConfig(product.name) : null;
+
+  useEffect(() => {
+    if (product?.category !== 'box' || !boxConfig || cookieProducts.length === 0) return;
+    const hasUserSelection = Object.values(selections).some(qty => qty > 0);
+    if (hasUserSelection) return;
+    setSelections(buildDefaultSelections(boxConfig, cookieProducts));
+  }, [product, boxConfig, cookieProducts, selections]);
 
   const allGroupsFilled = !boxConfig || boxConfig.every(group => {
     const available = cookieProducts.filter(p => p.category === group.category);
@@ -295,6 +337,7 @@ export default function Products() {
                     cookieProducts={cookieProducts}
                     selections={selections}
                     setSelections={setSelections}
+                    onOpenFlavour={setSelectedFlavour}
                   />
                 ))}
               </div>
@@ -333,6 +376,51 @@ export default function Products() {
           )}
         </div>
       </div>
+
+      {selectedFlavour && (
+        <div
+          className="fixed inset-0 z-[100] bg-black/50 backdrop-blur-[1px] flex items-center justify-center px-4"
+          onClick={() => setSelectedFlavour(null)}
+        >
+          <div
+            className="bg-white rounded-2xl max-w-2xl w-full shadow-2xl border border-gray-200 overflow-hidden"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex items-center justify-between px-5 py-4 border-b border-gray-200">
+              <h3 className="text-gray-900 text-xl">{selectedFlavour.name}</h3>
+              <button
+                type="button"
+                onClick={() => setSelectedFlavour(null)}
+                className="p-2 rounded-full hover:bg-gray-100 transition-colors"
+                aria-label="Close flavour details"
+              >
+                <X className="w-5 h-5 text-gray-600" />
+              </button>
+            </div>
+            <div className="grid md:grid-cols-2 gap-5 p-5">
+              <div className="aspect-square rounded-xl overflow-hidden bg-gray-100">
+                <ImageWithFallback
+                  src={selectedFlavour.image}
+                  alt={selectedFlavour.name}
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              <div className="flex flex-col">
+                <p className="text-gray-600 text-sm whitespace-pre-line leading-relaxed flex-grow">
+                  {selectedFlavour.description || 'No flavour notes available yet.'}
+                </p>
+                <button
+                  type="button"
+                  onClick={() => setSelectedFlavour(null)}
+                  className="mt-4 bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors w-fit"
+                >
+                  Continue Customising
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

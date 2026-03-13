@@ -10,7 +10,7 @@ const Hero = () => {
   return (
      <section id="home" className="relative bg-gradient-to-br from-red-50 to-white py-20 sm:py-32">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid md:grid-cols-2 gap-12 items-center">
+          <div className="grid md:grid-cols-[1fr_1.2fr] gap-10 items-center">
             <div className="space-y-6">
               <div className="inline-block bg-red-100 text-red-600 px-4 py-2 rounded-full">
                 Baked Fresh to Order
@@ -19,7 +19,7 @@ const Hero = () => {
                 Homemade Cookies, <span className="text-red-600">Posted</span> to Your Door
               </h1>
               <p className="text-gray-600 text-lg">
-                Thick, gooey, handcrafted cookie boxes — beautifully packaged and posted straight to you from our South London micro-bakery.
+                Thick, gooey, handcrafted cookie boxes, beautifully packaged and posted straight to you from our South London micro-bakery.
               </p>
               <div className="flex gap-4">
                 <button
@@ -39,7 +39,7 @@ const Hero = () => {
             </div>
 
             <div className="relative">
-              <div className="aspect-square rounded-2xl overflow-hidden shadow-2xl">
+              <div className="aspect-[4/5] sm:aspect-square rounded-2xl overflow-hidden shadow-2xl max-w-md sm:max-w-xl md:max-w-none mx-auto md:scale-110 origin-center">
                 <ImageWithFallback
                   src={tower}
                   alt="Fresh baked cookies"
