@@ -16,10 +16,10 @@ const Hero = () => {
                 Baked Fresh to Order
               </div>
               <h1 className="text-5xl sm:text-6xl text-gray-900">
-                Homemade Cookies, <span className="text-red-600">Posted</span> to Your Door
+                Thick, Gooey Cookies Done Right
               </h1>
               <p className="text-gray-600 text-lg">
-                Thick, gooey, handcrafted cookie boxes, beautifully packaged and posted straight to you from our South London micro-bakery.
+                Each cookie box is freshly baked in small batches, hand packaged and posted straight to your door for the ultimate cookie experience.
               </p>
               <div className="flex gap-4">
                 <button
