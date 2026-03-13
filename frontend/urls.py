@@ -10,6 +10,6 @@ urlpatterns = [
     path('signin', index),
     # Add a path for product/slug
     path('product/<str:slug>', index),
-    # Catch-all pattern as fallback for all SPA routes.
-    re_path(r'^.*$', index),
+    # Catch-all SPA fallback, excluding backend/admin/static/media paths.
+    re_path(r'^(?!admin/?$|admin/|api/|media/|static/).*$' , index),
 ]

@@ -9,10 +9,10 @@ const About = () => {
           <div className="space-y-6">
             <h2 className="text-4xl text-gray-900">About Us</h2>
             <p className="text-gray-600 text-lg leading-relaxed">
-              Posted Cookies began with a simple obsession: thick, gooey cookies done properly.
+              Posted Cookies began with a simple obsession: thick, gooey cookies done right.
             </p>
             <p className="text-gray-600 text-lg leading-relaxed">
-              From our South London micro-bakery, we craft gourmand cookie boxes designed to feel like a little luxury &mdash; whether you&apos;re gifting, sharing, or keeping them to yourself.
+              From our South London micro-bakery, we craft gourmand cookie boxes designed to feel like a little luxury, whether you&apos;re gifting, sharing, or keeping them to yourself.
             </p>
             <p className="text-gray-600 text-lg leading-relaxed">
               Each cookie is handmade in small batches, thoughtfully packaged, and posted with care. We offer a selection of classic cookie flavours and a new limited-edition flavour every month. All flavours are inspired by indulgence, nostalgia, and comfort.
@@ -24,7 +24,7 @@ const About = () => {
               <div className="bg-white p-6 rounded-xl shadow-lg">
                 <Package className="w-12 h-12 text-red-600 mb-4" />
                 <h4 className="text-gray-900 mb-2">Small Batches</h4>
-                <p className="text-gray-600">Baked fresh to order, never mass-produced</p>
+                <p className="text-gray-600">Baked fresh to order</p>
               </div>
               <div className="bg-white p-6 rounded-xl shadow-lg">
                 <Sparkles className="w-12 h-12 text-red-600 mb-4" />
@@ -40,8 +40,8 @@ const About = () => {
               </div>
               <div className="bg-white p-6 rounded-xl shadow-lg">
                 <Truck className="w-12 h-12 text-red-600 mb-4" />
-                <h4 className="text-gray-900 mb-2">Free Delivery</h4>
-                <p className="text-gray-600">Posted nationwide via Royal Mail Tracked 24</p>
+                <h4 className="text-gray-900 mb-2">Free Collection</h4>
+                <p className="text-gray-600">Free collection available from SE23 and SW2</p>
               </div>
             </div>
           </div>

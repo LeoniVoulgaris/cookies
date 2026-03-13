@@ -36,6 +36,7 @@ const NavBar = () => {
               <button onClick={() => scrollToSection('home')} className="text-gray-700 hover:text-red-600 transition-colors">Home</button>
               <button onClick={() => scrollToSection('products')} className="text-gray-700 hover:text-red-600 transition-colors">Products</button>
               <button onClick={() => scrollToSection('about')} className="text-gray-700 hover:text-red-600 transition-colors">About</button>
+              <button onClick={() => scrollToSection('faqs')} className="text-gray-700 hover:text-red-600 transition-colors">FAQs</button>
               <button onClick={() => scrollToSection('contact')} className="text-gray-700 hover:text-red-600 transition-colors">Contact</button>
             </nav>
 
@@ -69,8 +70,9 @@ const NavBar = () => {
           {mobileOpen && (
             <div className="md:hidden border-t border-gray-200 py-4 flex flex-col gap-4 px-2">
               <button onClick={() => scrollToSection('home')} className="text-gray-700 hover:text-red-600 transition-colors text-left">Home</button>
-              <button onClick={() => scrollToSection('products')} className="text-gray-700 hover:text-red-600 transition-colors text-left">Products</button>
+              <button onClick={() => scrollToSection('products')} className="text-gray-700 hover:text-red-600 transition-colors text-left">Shop</button>
               <button onClick={() => scrollToSection('about')} className="text-gray-700 hover:text-red-600 transition-colors text-left">About</button>
+              <button onClick={() => scrollToSection('faqs')} className="text-gray-700 hover:text-red-600 transition-colors text-left">FAQs</button>
               <button onClick={() => scrollToSection('contact')} className="text-gray-700 hover:text-red-600 transition-colors text-left">Contact</button>
             </div>
           )}

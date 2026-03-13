@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Mail, MapPin, ChevronDown, ChevronUp } from 'lucide-react';
+import { Mail, MapPin, ChevronDown, ChevronUp, Instagram } from 'lucide-react';
 
 const FAQS = [
   {
@@ -21,6 +21,10 @@ const FAQS = [
   {
     q: 'Do your products contain allergens?',
     a: 'All products are made in a bakery that stores and bakes with NUTS, SOYA, GLUTEN, EGGS and DAIRY, so may contain traces due to cross contamination.',
+  },
+  {
+    q: 'Do you offer collection?',
+    a: 'Free collection from se23 and sw2, the exact collection point will be sent to you once your order has been processed',
   },
 ];
 
@@ -44,7 +48,7 @@ const Contact = () => {
   return (
     <>
       {/* FAQ Section */}
-      <section className="py-20 bg-white">
+      <section id="faqs" className="py-20 bg-white">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="text-4xl text-gray-900 mb-4">FAQs</h2>
@@ -59,7 +63,7 @@ const Contact = () => {
       <section id="contact" className="py-20 bg-red-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-4xl text-gray-900 mb-4">Get in Touch</h2>
+            <h2 className="text-4xl text-gray-900 mb-4">Stay Posted</h2>
             <p className="text-gray-600 text-lg">We'd love to hear from you!</p>
           </div>
 
@@ -77,6 +81,29 @@ const Contact = () => {
               </div>
               <h4 className="text-gray-900 mb-2">Location</h4>
               <p className="text-gray-600">South London</p>
+            </div>
+          </div>
+
+          <div className="mt-10 text-center">
+            <h4 className="text-gray-900 mb-3">Follow us</h4>
+            <div className="flex items-center justify-center gap-6">
+              <a
+                href="https://www.instagram.com/postedcookies"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 text-gray-600 hover:text-red-600 transition-colors"
+              >
+                <Instagram className="w-5 h-5" /> Instagram
+              </a>
+              <a
+                href="https://www.tiktok.com/@postedcookies"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 text-gray-600 hover:text-red-600 transition-colors"
+              >
+                <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-red-100 text-red-600 text-[10px] font-bold">TT</span>
+                TikTok
+              </a>
             </div>
           </div>
         </div>

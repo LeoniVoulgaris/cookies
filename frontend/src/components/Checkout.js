@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { CheckCircle, ArrowLeft, Package, CreditCard, Banknote, User, MapPin, FileText } from 'lucide-react';
+import { CheckCircle, ArrowLeft, Package, CreditCard, User, MapPin, FileText } from 'lucide-react';
 import NavBar from './NavBar';
 import { useCart } from '../context/CartContext';
 
 const PAYMENT_METHODS = [
-  { id: 'cash_on_delivery', label: 'Cash on Delivery', Icon: Banknote, available: true },
   { id: 'card', label: 'Credit / Debit Card', Icon: CreditCard, available: true },
 ];
 
@@ -29,7 +28,7 @@ const Checkout = () => {
     postal_code: '',
     country: '',
     instructions: '',
-    payment_method: 'cash_on_delivery',
+    payment_method: 'card',
   });
 
   // Handle return from Stripe: /checkout?stripe_success=true&order_id=123
@@ -101,7 +100,7 @@ const Checkout = () => {
         </div>
       );
     }
-    // COD order confirmed
+    // Order confirmed
     return (
       <div className="min-h-screen bg-white">
         <NavBar />

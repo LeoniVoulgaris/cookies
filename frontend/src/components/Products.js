@@ -281,7 +281,7 @@ export default function Products() {
               {isBox && (
                 <div className="flex items-center gap-2 text-gray-500 text-sm mb-4">
                   <Truck className="w-4 h-4 text-red-600" />
-                  Free delivery via Royal Mail Tracked 24
+                  Collection available from SE23 and SW2
                 </div>
               )}
 
