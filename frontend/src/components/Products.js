@@ -42,6 +42,14 @@ const buildDefaultSelections = (boxConfig, cookieProducts) => {
   return defaults;
 };
 
+const inferCategory = (product) => {
+  if (product.category === 'classic' || product.category === 'limited') return product.category;
+  const name = (product.name || '').toLowerCase();
+  const limitedHints = ['limited', 'mini eggs', 'cream egg', 'easter', 'lotus'];
+  if (limitedHints.some(hint => name.includes(hint))) return 'limited';
+  return 'classic';
+};
+
 // ----- Flavour picker sub-component -------------------------------------
 const FlavourGroup = ({ group, cookieProducts, selections, setSelections, onOpenFlavour }) => {
   const available = cookieProducts.filter(p => p.category === group.category);
@@ -158,7 +166,14 @@ export default function Products() {
   useEffect(() => {
     if (product?.category === 'box') {
       api.get('products/').then(res => {
-        setCookieProducts(res.data.filter(p => p.category === 'classic' || p.category === 'limited'));
+        const cookiesOnly = res.data
+          .filter(p => {
+            const explicitBox = p.category === 'box';
+            const nameLooksLikeBox = (p.name || '').toLowerCase().includes('box');
+            return !explicitBox && !nameLooksLikeBox;
+          })
+          .map(p => ({ ...p, category: inferCategory(p) }));
+        setCookieProducts(cookiesOnly);
       });
     }
   }, [product]);
@@ -174,6 +189,7 @@ export default function Products() {
 
   const allGroupsFilled = !boxConfig || boxConfig.every(group => {
     const available = cookieProducts.filter(p => p.category === group.category);
+    if (available.length === 0) return true;
     return available.reduce((sum, p) => sum + (selections[p.name] || 0), 0) === group.slots;
   });
 
@@ -181,11 +197,18 @@ export default function Products() {
     flavours: Object.fromEntries(Object.entries(selections).filter(([, qty]) => qty > 0)),
   });
 
+  const getBoxCustomisation = () => {
+    const existing = buildCustomisation();
+    if (Object.keys(existing.flavours).length > 0) return existing;
+    const defaults = boxConfig ? buildDefaultSelections(boxConfig, cookieProducts) : {};
+    return { flavours: defaults };
+  };
+
   const handleAddToCart = () => {
-    addToCart(product.id, quantity, product.category === 'box' ? buildCustomisation() : null);
+    addToCart(product.id, quantity, product.category === 'box' ? getBoxCustomisation() : null);
   };
   const handleBuyNow = () => {
-    addToCart(product.id, quantity, product.category === 'box' ? buildCustomisation() : null);
+    addToCart(product.id, quantity, product.category === 'box' ? getBoxCustomisation() : null);
     openCart();
   };
 
