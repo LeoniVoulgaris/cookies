@@ -15,6 +15,25 @@ from .serializers import ProductSerializer, DetailedProductSerializer
 
 BASE_URL = settings.REACT_BASE_URL
 
+
+def _save_customer_shipping_details(customer, data):
+    """Persist latest checkout contact/shipping details on the customer profile."""
+    changed = False
+    fields = {
+        'email': data.get('email', ''),
+        'full_name': data.get('full_name', ''),
+        'address': data.get('address', ''),
+        'city': data.get('city', ''),
+        'postal_code': data.get('postal_code', ''),
+        'country': data.get('country', ''),
+    }
+    for field, value in fields.items():
+        if value and getattr(customer, field, None) != value:
+            setattr(customer, field, value)
+            changed = True
+    if changed:
+        customer.save()
+
 @api_view(['GET'])
 def product(request):
     products = Product.objects.all()
@@ -117,6 +136,8 @@ def checkout_view(request):
     if not cart.items.exists():
         return Response({"error": "Cart is empty"}, status=status.HTTP_400_BAD_REQUEST)
 
+    _save_customer_shipping_details(customer, request.data)
+
     total = sum(item.quantity * item.price_at_addition for item in cart.items.all())
     order = Order.objects.create(
         customer=customer,
@@ -176,6 +197,8 @@ def create_stripe_checkout_session(request):
 
     if not cart.items.exists():
         return Response({'error': 'Cart is empty'}, status=status.HTTP_400_BAD_REQUEST)
+
+    _save_customer_shipping_details(customer, request.data)
 
     total = sum(item.quantity * item.price_at_addition for item in cart.items.all())
     order = Order.objects.create(

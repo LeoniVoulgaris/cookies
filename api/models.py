@@ -40,6 +40,11 @@ class Customer(models.Model):
     """
     supabase_user_id = models.UUIDField(unique=True, primary_key=True)
     email = models.EmailField(blank=True, null=True)
+    full_name = models.CharField(max_length=200, blank=True, null=True)
+    address = models.TextField(blank=True, null=True)
+    city = models.CharField(max_length=100, blank=True, null=True)
+    postal_code = models.CharField(max_length=20, blank=True, null=True)
+    country = models.CharField(max_length=100, blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

@@ -2,9 +2,14 @@ from django.contrib import admin
 from .models import Product, Customer, Cart, CartItem, Order, OrderItem
 
 admin.site.register(Product)
-admin.site.register(Customer)
 admin.site.register(Cart)
 admin.site.register(CartItem)
+
+
+@admin.register(Customer)
+class CustomerAdmin(admin.ModelAdmin):
+    list_display = ('email', 'full_name', 'city', 'country', 'created_at')
+    search_fields = ('email', 'full_name', 'address', 'postal_code', 'city', 'country')
 
 
 class OrderItemInline(admin.TabularInline):
