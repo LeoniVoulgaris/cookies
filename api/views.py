@@ -1,9 +1,10 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, authentication_classes, permission_classes
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework.permissions import AllowAny
 from django.conf import settings
 import stripe
 from .models import Product, Cart, CartItem, Order, OrderItem
@@ -28,6 +29,9 @@ def product_detail(request, slug):
     return Response(serializer.data)
 
 @api_view(['GET', 'POST', 'DELETE'])
+@authentication_classes([])
+@permission_classes([AllowAny])
+@csrf_exempt
 def cart_view(request):
     customer = get_or_create_customer_from_token(request)
     if not customer:
@@ -73,6 +77,9 @@ def cart_view(request):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 @api_view(['PATCH'])
+@authentication_classes([])
+@permission_classes([AllowAny])
+@csrf_exempt
 def update_cart_item(request, item_id):
     customer = get_or_create_customer_from_token(request)
     if not customer:
@@ -94,6 +101,9 @@ def update_cart_item(request, item_id):
 
 
 @api_view(['POST'])
+@authentication_classes([])
+@permission_classes([AllowAny])
+@csrf_exempt
 def checkout_view(request):
     customer = get_or_create_customer_from_token(request)
     if not customer:
@@ -137,6 +147,8 @@ def checkout_view(request):
 
 
 @api_view(['GET'])
+@authentication_classes([])
+@permission_classes([AllowAny])
 def order_detail(request, order_id):
     customer = get_or_create_customer_from_token(request)
     if not customer:
@@ -149,6 +161,9 @@ def order_detail(request, order_id):
 
 
 @api_view(['POST'])
+@authentication_classes([])
+@permission_classes([AllowAny])
+@csrf_exempt
 def create_stripe_checkout_session(request):
     customer = get_or_create_customer_from_token(request)
     if not customer:
