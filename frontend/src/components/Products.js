@@ -87,7 +87,7 @@ const FlavourGroup = ({ group, cookieProducts, selections, setSelections, onOpen
             >
               <div className="w-12 h-12 flex-shrink-0 rounded-lg overflow-hidden bg-gray-100">
                 {cookie.image
-                  ? <img src={cookie.image} alt={cookie.name} className="w-full h-full object-cover" />
+                  ? <img src={cookie.image} alt={cookie.name} className="w-full h-full object-contain p-1 bg-white" />
                   : <Cookie className="w-8 h-8 text-red-300 m-2" />}
               </div>
               <span className="flex-1 text-sm text-gray-800 leading-tight">{cookie.name}</span>
@@ -214,6 +214,7 @@ export default function Products() {
 
   const isBox = product.category === 'box';
   const isCookie = product.category === 'classic' || product.category === 'limited';
+  const productImageClass = isBox ? 'w-full h-full object-cover' : 'w-full h-full object-contain p-4 bg-white';
 
   return (
     <div className="min-h-screen bg-white">
@@ -232,7 +233,7 @@ export default function Products() {
                 <ImageWithFallback
                   src={product.image}
                   alt={product.name}
-                  className="w-full h-full object-cover"
+                  className={productImageClass}
                 />
               </div>
               {product.category === 'limited' && (
@@ -361,7 +362,7 @@ export default function Products() {
                       <ImageWithFallback
                         src={similar.image}
                         alt={similar.name}
-                        className="w-full h-full object-cover"
+                        className={`w-full h-full ${similar.category === 'box' ? 'object-cover' : 'object-contain p-1 bg-white'}`}
                       />
                     </div>
                     <div className="flex-1 min-w-0">
@@ -402,7 +403,7 @@ export default function Products() {
                 <ImageWithFallback
                   src={selectedFlavour.image}
                   alt={selectedFlavour.name}
-                  className="w-full h-full object-cover"
+                  className="w-full h-full object-contain p-3 bg-white"
                 />
               </div>
               <div className="flex flex-col">
