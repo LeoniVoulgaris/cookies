@@ -379,15 +379,15 @@ export default function Products() {
 
       {selectedFlavour && (
         <div
-          className="fixed inset-0 z-[100] bg-black/50 backdrop-blur-[1px] flex items-center justify-center px-4"
+          className="fixed inset-0 z-[100] bg-black/50 backdrop-blur-[1px] flex items-end sm:items-center justify-center px-0 sm:px-4"
           onClick={() => setSelectedFlavour(null)}
         >
           <div
-            className="bg-white rounded-2xl max-w-5xl w-full shadow-2xl border border-gray-200 overflow-hidden"
+            className="bg-white rounded-t-2xl sm:rounded-2xl max-w-5xl w-full max-h-[90dvh] shadow-2xl border border-gray-200 overflow-hidden flex flex-col"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200">
-              <h3 className="text-gray-900 text-2xl">{selectedFlavour.name}</h3>
+            <div className="flex items-center justify-between px-4 sm:px-6 py-4 border-b border-gray-200 flex-shrink-0">
+              <h3 className="text-gray-900 text-lg sm:text-2xl pr-3">{selectedFlavour.name}</h3>
               <button
                 type="button"
                 onClick={() => setSelectedFlavour(null)}
@@ -397,8 +397,8 @@ export default function Products() {
                 <X className="w-5 h-5 text-gray-600" />
               </button>
             </div>
-            <div className="grid md:grid-cols-[1.2fr_1fr] gap-6 p-6">
-              <div className="aspect-[4/3] md:aspect-[5/4] rounded-xl overflow-hidden bg-gray-100">
+            <div className="grid md:grid-cols-[1.2fr_1fr] gap-4 sm:gap-6 p-4 sm:p-6 overflow-y-auto">
+              <div className="aspect-[5/4] sm:aspect-[4/3] md:aspect-[5/4] rounded-xl overflow-hidden bg-gray-100">
                 <ImageWithFallback
                   src={selectedFlavour.image}
                   alt={selectedFlavour.name}
@@ -406,13 +406,13 @@ export default function Products() {
                 />
               </div>
               <div className="flex flex-col">
-                <p className="text-gray-600 text-base whitespace-pre-line leading-relaxed flex-grow">
+                <p className="text-gray-600 text-sm sm:text-base whitespace-pre-line leading-relaxed flex-grow">
                   {selectedFlavour.description || 'No flavour notes available yet.'}
                 </p>
                 <button
                   type="button"
                   onClick={() => setSelectedFlavour(null)}
-                  className="mt-4 bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors w-fit"
+                  className="mt-4 bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors w-full sm:w-fit"
                 >
                   Continue Customising
                 </button>
