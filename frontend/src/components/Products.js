@@ -83,7 +83,7 @@ const FlavourGroup = ({ group, cookieProducts, selections, setSelections, onOpen
                   onOpenFlavour(cookie);
                 }
               }}
-              className={`flex items-center gap-3 p-3 rounded-xl border transition-colors ${count > 0 ? 'border-red-400 bg-red-50' : 'border-gray-200 bg-white'}`}
+              className={`cursor-pointer flex items-center gap-3 p-3 rounded-xl border transition-colors ${count > 0 ? 'border-red-400 bg-red-50' : 'border-gray-200 bg-white'}`}
             >
               <div className="w-12 h-12 flex-shrink-0 rounded-lg overflow-hidden bg-gray-100">
                 {cookie.image
@@ -383,11 +383,11 @@ export default function Products() {
           onClick={() => setSelectedFlavour(null)}
         >
           <div
-            className="bg-white rounded-2xl max-w-2xl w-full shadow-2xl border border-gray-200 overflow-hidden"
+            className="bg-white rounded-2xl max-w-5xl w-full shadow-2xl border border-gray-200 overflow-hidden"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="flex items-center justify-between px-5 py-4 border-b border-gray-200">
-              <h3 className="text-gray-900 text-xl">{selectedFlavour.name}</h3>
+            <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200">
+              <h3 className="text-gray-900 text-2xl">{selectedFlavour.name}</h3>
               <button
                 type="button"
                 onClick={() => setSelectedFlavour(null)}
@@ -397,8 +397,8 @@ export default function Products() {
                 <X className="w-5 h-5 text-gray-600" />
               </button>
             </div>
-            <div className="grid md:grid-cols-2 gap-5 p-5">
-              <div className="aspect-square rounded-xl overflow-hidden bg-gray-100">
+            <div className="grid md:grid-cols-[1.2fr_1fr] gap-6 p-6">
+              <div className="aspect-[4/3] md:aspect-[5/4] rounded-xl overflow-hidden bg-gray-100">
                 <ImageWithFallback
                   src={selectedFlavour.image}
                   alt={selectedFlavour.name}
@@ -406,7 +406,7 @@ export default function Products() {
                 />
               </div>
               <div className="flex flex-col">
-                <p className="text-gray-600 text-sm whitespace-pre-line leading-relaxed flex-grow">
+                <p className="text-gray-600 text-base whitespace-pre-line leading-relaxed flex-grow">
                   {selectedFlavour.description || 'No flavour notes available yet.'}
                 </p>
                 <button
