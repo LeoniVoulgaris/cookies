@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Mail, MapPin, ChevronDown, ChevronUp, Instagram } from 'lucide-react';
+import TiktokFillIcon from './TiktokIcon';
 
 const FAQS = [
   {
@@ -104,7 +105,7 @@ const Contact = () => {
                 className="inline-flex flex-col items-center text-gray-600 hover:text-red-600 transition-colors"
               >
                 <span className="inline-flex items-center justify-center w-16 h-16 bg-red-100 rounded-full mb-4">
-                  <span className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-white text-red-600 text-xs font-bold">TT</span>
+                  <TiktokFillIcon size={32} className="text-red-600 w-8 h-8" />
                 </span>
                 <h4 className="text-gray-900 mb-2">TikTok</h4>
                 <span>@postedcookies</span>
