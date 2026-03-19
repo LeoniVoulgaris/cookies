@@ -34,7 +34,7 @@ const NavBar = () => {
 
             <nav className="hidden md:flex items-center gap-8">
               <button onClick={() => scrollToSection('home')} className="text-gray-700 hover:text-red-600 transition-colors">Home</button>
-              <button onClick={() => scrollToSection('products')} className="text-gray-700 hover:text-red-600 transition-colors">Products</button>
+              <button onClick={() => scrollToSection('products')} className="text-gray-700 hover:text-red-600 transition-colors">Shop</button>
               <button onClick={() => scrollToSection('about')} className="text-gray-700 hover:text-red-600 transition-colors">About</button>
               <button onClick={() => scrollToSection('faqs')} className="text-gray-700 hover:text-red-600 transition-colors">FAQs</button>
               <button onClick={() => scrollToSection('contact')} className="text-gray-700 hover:text-red-600 transition-colors">Contact</button>

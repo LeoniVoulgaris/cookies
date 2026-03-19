@@ -353,6 +353,7 @@ export default function Products() {
           {isBox && boxConfig && cookieProducts.length > 0 && (
             <div className="border-t border-gray-200 p-6 lg:p-8">
               <h3 className="text-xl text-gray-900 mb-6">Customise Your Box</h3>
+              <h3 className="text-xl text-gray-400 mb-6">*click on cookie for more information</h3>
               <div className="space-y-8">
                 {boxConfig.map(group => (
                   <FlavourGroup

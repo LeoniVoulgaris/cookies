@@ -33,7 +33,7 @@ const Menu = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="text-4xl text-gray-900 mb-4">Our Cookie Boxes</h2>
-            <p className="text-gray-600 text-lg">Handcrafted, gift packaged and posted straight to your door</p>
+            <p className="text-gray-600 text-lg">Hand baked to perfection, gift packaged and posted straight to your door</p>
           </div>
 
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">

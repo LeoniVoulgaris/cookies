@@ -67,7 +67,7 @@ const Contact = () => {
             <p className="text-gray-600 text-lg">We'd love to hear from you!</p>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-8 max-w-2xl mx-auto">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-5xl mx-auto">
             <div className="text-center">
               <div className="inline-flex items-center justify-center w-16 h-16 bg-red-100 rounded-full mb-4">
                 <Mail className="w-8 h-8 text-red-600" />
@@ -82,27 +82,32 @@ const Contact = () => {
               <h4 className="text-gray-900 mb-2">Location</h4>
               <p className="text-gray-600">South London</p>
             </div>
-          </div>
-
-          <div className="mt-10 text-center">
-            <h4 className="text-gray-900 mb-3">Follow us</h4>
-            <div className="flex items-center justify-center gap-6">
+            <div className="text-center">
               <a
                 href="https://www.instagram.com/postedcookies"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 text-gray-600 hover:text-red-600 transition-colors"
+                className="inline-flex flex-col items-center text-gray-600 hover:text-red-600 transition-colors"
               >
-                <Instagram className="w-5 h-5" /> Instagram
+                <span className="inline-flex items-center justify-center w-16 h-16 bg-red-100 rounded-full mb-4">
+                  <Instagram className="w-8 h-8 text-red-600" />
+                </span>
+                <h4 className="text-gray-900 mb-2">Instagram</h4>
+                <span>@postedcookies</span>
               </a>
+            </div>
+            <div className="text-center">
               <a
                 href="https://www.tiktok.com/@postedcookies"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 text-gray-600 hover:text-red-600 transition-colors"
+                className="inline-flex flex-col items-center text-gray-600 hover:text-red-600 transition-colors"
               >
-                <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-red-100 text-red-600 text-[10px] font-bold">TT</span>
-                TikTok
+                <span className="inline-flex items-center justify-center w-16 h-16 bg-red-100 rounded-full mb-4">
+                  <span className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-white text-red-600 text-xs font-bold">TT</span>
+                </span>
+                <h4 className="text-gray-900 mb-2">TikTok</h4>
+                <span>@postedcookies</span>
               </a>
             </div>
           </div>
