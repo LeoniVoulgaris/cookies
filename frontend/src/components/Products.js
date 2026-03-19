@@ -93,9 +93,9 @@ const FlavourGroup = ({ group, cookieProducts, selections, setSelections, onOpen
               }}
               className={`cursor-pointer flex items-center gap-3 p-3 rounded-xl border transition-colors ${count > 0 ? 'border-red-400 bg-red-50' : 'border-gray-200 bg-white'}`}
             >
-              <div className="w-12 h-12 flex-shrink-0 rounded-lg overflow-hidden bg-gray-100">
+              <div className="w-12 h-12 flex-shrink-0 rounded-lg overflow-hidden bg-transparent">
                 {cookie.image
-                  ? <img src={cookie.image} alt={cookie.name} className="w-full h-full object-contain p-1 bg-white" />
+                  ? <img src={cookie.image} alt={cookie.name} className="w-full h-full object-cover scale-150" />
                   : <Cookie className="w-8 h-8 text-red-300 m-2" />}
               </div>
               <span className="flex-1 text-sm text-gray-800 leading-tight">{cookie.name}</span>
@@ -386,7 +386,7 @@ export default function Products() {
                       <ImageWithFallback
                         src={similar.image}
                         alt={similar.name}
-                        className={`w-full h-full ${similar.category === 'box' ? 'object-cover' : 'object-contain p-1 bg-white'}`}
+                        className={`w-full h-full object-cover ${similar.category !== 'box' ? 'scale-150' : ''}`}
                       />
                     </div>
                     <div className="flex-1 min-w-0">
