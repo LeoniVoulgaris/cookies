@@ -162,6 +162,7 @@ def checkout_view(request):
             product_name=item.product.name,
             quantity=item.quantity,
             price=item.price_at_addition,
+            customisation=item.customisation
         )
 
     cart.is_active = False
@@ -226,6 +227,7 @@ def create_stripe_checkout_session(request):
             product_name=item.product.name,
             quantity=item.quantity,
             price=item.price_at_addition,
+            customisation=item.customisation
         )
 
     cart.is_active = False

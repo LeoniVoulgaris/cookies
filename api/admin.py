@@ -15,7 +15,7 @@ class CustomerAdmin(admin.ModelAdmin):
 class OrderItemInline(admin.TabularInline):
     model = OrderItem
     extra = 0
-    readonly_fields = ('product', 'product_name', 'quantity', 'price')
+    readonly_fields = ('product', 'product_name', 'quantity', 'price', 'customisation')
 
 
 @admin.register(Order)
