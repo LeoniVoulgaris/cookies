@@ -17,7 +17,7 @@ const FAQS = [
   },
   {
     q: 'Can I place a custom or bulk order?',
-    a: 'For all custom or bulk enquiries, please email us at postedcutomcookies@gmail.com with your order details and preferred delivery date.',
+    a: 'For all custom or bulk enquiries, please email us at postedcustomcookies@gmail.com with your order details and preferred delivery date.',
   },
   {
     q: 'Do your products contain allergens?',
@@ -74,7 +74,7 @@ const Contact = () => {
                 <Mail className="w-8 h-8 text-red-600" />
               </div>
               <h4 className="text-gray-900 mb-2">Email</h4>
-              <a href="mailto:postedcutomcookies@gmail.com" className="text-gray-600 hover:text-red-600 transition-colors">postedcutomcookies@gmail.com</a>
+              <a href="mailto:postedcutomcookies@gmail.com" className="text-gray-600 hover:text-red-600 transition-colors">postedcustomcookies@gmail.com</a>
             </div>
             <div className="text-center">
               <div className="inline-flex items-center justify-center w-16 h-16 bg-red-100 rounded-full mb-4">
