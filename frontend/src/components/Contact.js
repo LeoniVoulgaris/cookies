@@ -25,7 +25,7 @@ const FAQS = [
   },
   {
     q: 'Do you offer collection?',
-    a: 'Free collection from se23 and sw2, the exact collection point will be sent to you once your order has been processed',
+    a: 'We offer free collection from SE23 and SW2. The exact collection point will be sent to you once your order has been processed',
   },
 ];
 

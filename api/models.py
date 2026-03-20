@@ -105,6 +105,11 @@ class Order(models.Model):
     country = models.CharField(max_length=100, blank=True, null=True)
     instructions = models.TextField(blank=True, null=True)
     payment_method = models.CharField(max_length=50, blank=True, null=True)
+    delivery_method = models.CharField(
+        max_length=20,
+        choices=[('delivery', 'Delivery'), ('collection', 'Collection')],
+        default='delivery',
+    )
 
     def __str__(self):
         return f"Order {self.id} - {self.customer}"

@@ -29,6 +29,7 @@ const Checkout = () => {
     country: '',
     instructions: '',
     payment_method: 'card',
+    delivery_method: 'delivery',
   });
 
   // Handle return from Stripe: /checkout?stripe_success=true&order_id=123
@@ -42,9 +43,10 @@ const Checkout = () => {
 
   const items = cart?.items ?? [];
   const totalPrice = cart?.total_price ?? '0.00';
-  const SHIPPING_FEE = 4.45;
+  const SHIPPING_FEE = 3.99;
   const subtotal = Number(totalPrice);
-  const shipping = items.length > 0 ? SHIPPING_FEE : 0;
+  const requiresDelivery = form.delivery_method === 'delivery';
+  const shipping = items.length > 0 && requiresDelivery ? SHIPPING_FEE : 0;
   const grandTotal = subtotal + shipping;
 
   const handleChange = e => setForm(f => ({ ...f, [e.target.name]: e.target.value }));
@@ -110,14 +112,18 @@ const Checkout = () => {
           <p className="text-gray-600 mb-1">Order #{order.id}</p>
           <p className="text-gray-600 mb-1">Hi {order.full_name}, thank you for your order!</p>
           <p className="text-gray-500 text-sm mb-8">We'll be in touch soon at {order.email}.</p>
-          <div className="bg-gray-50 rounded-xl p-6 mb-8 text-left">
+            <div className="bg-gray-50 rounded-xl p-6 mb-8 text-left">
             <h2 className="text-lg text-gray-900 mb-4 flex items-center gap-2">
               <Package className="w-5 h-5 text-red-600" />
               Order Summary
             </h2>
             {(() => {
               const itemSubtotal = order.items.reduce((sum, item) => sum + (Number(item.price) * item.quantity), 0);
-              const shippingAmount = Math.max(0, Number(order.total_price) - itemSubtotal);
+              const shippingAmount =
+                order.delivery_method === 'collection'
+                  ? 0
+                  : Math.max(0, Number(order.total_price) - itemSubtotal);
+              const shippingLabel = order.delivery_method === 'collection' ? 'Collection' : 'Delivery';
               return (
                 <>
             <ul className="divide-y divide-gray-200">
@@ -133,7 +139,7 @@ const Checkout = () => {
               <span>£{itemSubtotal.toFixed(2)}</span>
             </div>
             <div className="flex justify-between pt-2 text-gray-600">
-              <span>Shipping</span>
+              <span>{shippingLabel}</span>
               <span>£{shippingAmount.toFixed(2)}</span>
             </div>
             <div className="flex justify-between pt-4 border-t border-gray-200 mt-2">
@@ -144,10 +150,17 @@ const Checkout = () => {
               );
             })()}
             <div className="mt-4 pt-4 border-t border-gray-200 text-sm text-gray-600 text-left">
-              <p>
-                <span className="font-medium">Delivery to: </span>
-                {order.address}, {order.city} {order.postal_code}, {order.country}
-              </p>
+              {order.delivery_method === 'collection' ? (
+                <p>
+                  <span className="font-medium">Collection: </span>
+                  We will email the collection point after your order is processed.
+                </p>
+              ) : (
+                <p>
+                  <span className="font-medium">Delivery to: </span>
+                  {order.address}, {order.city} {order.postal_code}, {order.country}
+                </p>
+              )}
               {order.instructions && (
                 <p className="mt-1">
                   <span className="font-medium">Instructions: </span>{order.instructions}
@@ -227,60 +240,105 @@ const Checkout = () => {
                 </div>
               </section>
 
-              {/* Delivery address */}
+              {/* Delivery method */}
               <section className="bg-white rounded-xl shadow-sm p-6">
                 <h2 className="text-lg text-gray-900 mb-4 flex items-center gap-2">
-                  <MapPin className="w-5 h-5 text-red-600" /> Delivery Address
+                  <MapPin className="w-5 h-5 text-red-600" /> Delivery Method
                 </h2>
-                <div className="space-y-4">
-                  <div>
-                    <label className={labelClass}>Street Address</label>
+                <div className="space-y-3">
+                  <label
+                    className={`flex items-center gap-3 p-4 border rounded-lg transition-colors ${
+                      form.delivery_method === 'delivery'
+                        ? 'border-red-500 bg-red-50 cursor-pointer'
+                        : 'border-gray-200 hover:border-gray-300 cursor-pointer'
+                    }`}
+                  >
                     <input
-                      name="address"
-                      value={form.address}
+                      type="radio"
+                      name="delivery_method"
+                      value="delivery"
+                      checked={form.delivery_method === 'delivery'}
                       onChange={handleChange}
-                      required
-                      placeholder="123 Baker Street"
-                      className={inputClass}
+                      className="accent-red-600"
                     />
-                  </div>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div>
-                      <label className={labelClass}>City</label>
-                      <input
-                        name="city"
-                        value={form.city}
-                        onChange={handleChange}
-                        required
-                        placeholder="London"
-                        className={inputClass}
-                      />
-                    </div>
-                    <div>
-                      <label className={labelClass}>Postal Code</label>
-                      <input
-                        name="postal_code"
-                        value={form.postal_code}
-                        onChange={handleChange}
-                        required
-                        placeholder="SW1A 1AA"
-                        className={inputClass}
-                      />
-                    </div>
-                  </div>
-                  <div>
-                    <label className={labelClass}>Country</label>
+                    <span className="text-gray-800 text-sm">Delivery (£3.99)</span>
+                  </label>
+                  <label
+                    className={`flex items-center gap-3 p-4 border rounded-lg transition-colors ${
+                      form.delivery_method === 'collection'
+                        ? 'border-red-500 bg-red-50 cursor-pointer'
+                        : 'border-gray-200 hover:border-gray-300 cursor-pointer'
+                    }`}
+                  >
                     <input
-                      name="country"
-                      value={form.country}
+                      type="radio"
+                      name="delivery_method"
+                      value="collection"
+                      checked={form.delivery_method === 'collection'}
                       onChange={handleChange}
-                      required
-                      placeholder="United Kingdom"
-                      className={inputClass}
+                      className="accent-red-600"
                     />
-                  </div>
+                    <span className="text-gray-800 text-sm">Collection (Free)</span>
+                  </label>
                 </div>
               </section>
+
+              {/* Delivery address */}
+              {requiresDelivery && (
+                <section className="bg-white rounded-xl shadow-sm p-6">
+                  <h2 className="text-lg text-gray-900 mb-4 flex items-center gap-2">
+                    <MapPin className="w-5 h-5 text-red-600" /> Delivery Address
+                  </h2>
+                  <div className="space-y-4">
+                    <div>
+                      <label className={labelClass}>Street Address</label>
+                      <input
+                        name="address"
+                        value={form.address}
+                        onChange={handleChange}
+                        required
+                        placeholder="123 Baker Street"
+                        className={inputClass}
+                      />
+                    </div>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      <div>
+                        <label className={labelClass}>City</label>
+                        <input
+                          name="city"
+                          value={form.city}
+                          onChange={handleChange}
+                          required
+                          placeholder="London"
+                          className={inputClass}
+                        />
+                      </div>
+                      <div>
+                        <label className={labelClass}>Postal Code</label>
+                        <input
+                          name="postal_code"
+                          value={form.postal_code}
+                          onChange={handleChange}
+                          required
+                          placeholder="SW1A 1AA"
+                          className={inputClass}
+                        />
+                      </div>
+                    </div>
+                    <div>
+                      <label className={labelClass}>Country</label>
+                      <input
+                        name="country"
+                        value={form.country}
+                        onChange={handleChange}
+                        required
+                        placeholder="United Kingdom"
+                        className={inputClass}
+                      />
+                    </div>
+                  </div>
+                </section>
+              )}
 
               {/* Special instructions */}
               <section className="bg-white rounded-xl shadow-sm p-6">
@@ -362,7 +420,7 @@ const Checkout = () => {
                   <span>£{subtotal.toFixed(2)}</span>
                 </div>
                 <div className="flex justify-between text-gray-600">
-                  <span>Shipping</span>
+                  <span>{requiresDelivery ? 'Delivery' : 'Collection'}</span>
                   <span>£{shipping.toFixed(2)}</span>
                 </div>
                 <div className="flex justify-between text-gray-900 font-medium text-base pt-2 border-t border-gray-200">
