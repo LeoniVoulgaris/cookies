@@ -423,7 +423,7 @@ export default function Products() {
               </button>
             </div>
             <div className="flex flex-col md:grid md:grid-cols-[1.2fr_1fr] gap-4 sm:gap-6 p-4 sm:p-6 overflow-y-auto">
-              <div className="w-full flex-shrink-0 aspect-[5/4] sm:aspect-[4/3] md:aspect-[5/4] rounded-xl overflow-hidden bg-gray-100">
+              <div className="w-full flex-shrink-0 min-h-[220px] sm:min-h-[260px] md:min-h-0 aspect-[5/4] sm:aspect-[4/3] md:aspect-[5/4] rounded-xl overflow-hidden bg-gray-100">
                 <ImageWithFallback
                   src={selectedFlavour.image}
                   alt={selectedFlavour.name}

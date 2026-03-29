@@ -265,14 +265,16 @@ def create_stripe_checkout_session(request):
             }
         )
 
+    base_url = BASE_URL.rstrip('/')
+
     session = stripe.checkout.Session.create(
         payment_method_types=['card'],
         line_items=line_items,
         mode='payment',
         customer_email=order.email or None,
         metadata={'order_id': order.id},
-        success_url=f"{BASE_URL}/checkout?stripe_success=true&order_id={order.id}",
-        cancel_url=f"{BASE_URL}/checkout",
+        success_url=f"{base_url}/checkout/success?stripe_success=true&order_id={order.id}",
+        cancel_url=f"{base_url}/checkout",
     )
 
     return Response({'url': session.url})

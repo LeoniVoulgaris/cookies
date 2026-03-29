@@ -36,10 +36,14 @@ const Checkout = () => {
   useEffect(() => {
     const stripeSuccess = searchParams.get('stripe_success');
     const orderId = searchParams.get('order_id');
-    if (stripeSuccess === 'true' && orderId) {
-      setOrder({ id: orderId, _stripe: true });
+    if (stripeSuccess === 'true') {
+      const redirectParams = new URLSearchParams({ stripe_success: 'true' });
+      if (orderId) {
+        redirectParams.set('order_id', orderId);
+      }
+      navigate(`/checkout/success?${redirectParams.toString()}`, { replace: true });
     }
-  }, [searchParams]);
+  }, [navigate, searchParams]);
 
   const items = cart?.items ?? [];
   const totalPrice = cart?.total_price ?? '0.00';
@@ -88,7 +92,11 @@ const Checkout = () => {
           <div className="max-w-2xl mx-auto px-4 py-20 text-center">
             <CheckCircle className="w-20 h-20 text-green-500 mx-auto mb-6" />
             <h1 className="text-3xl text-gray-900 mb-2">Payment Confirmed!</h1>
-            <p className="text-gray-600 mb-1">Order #{order.id}</p>
+            {order.id ? (
+              <p className="text-gray-600 mb-1">Order #{order.id}</p>
+            ) : (
+              <p className="text-gray-600 mb-1">Your order has been received.</p>
+            )}
             <p className="text-gray-500 text-sm mb-8">
               Your payment was successful. We'll be in touch with shipping details soon.
             </p>
