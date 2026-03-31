@@ -6,6 +6,8 @@ urlpatterns = [
     path('products', index),
     path('checkout', index),
     path('checkout/', index),
+    path('checkout/success', index),
+    path('checkout/success/', index),
     path('signup', index),
     path('signin', index),
     # Add a path for product/slug

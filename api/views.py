@@ -7,6 +7,7 @@ from rest_framework import status
 from rest_framework.permissions import AllowAny
 from django.conf import settings
 from decimal import Decimal
+from urllib.parse import urlparse
 import stripe
 from .models import Product, Cart, CartItem, Order, OrderItem
 from .serializers import CartSerializer, OrderSerializer
@@ -16,6 +17,30 @@ from .serializers import ProductSerializer, DetailedProductSerializer
 
 BASE_URL = settings.REACT_BASE_URL
 SHIPPING_FEE = Decimal('3.99')
+
+
+def _checkout_base_url(request):
+    """Build a stable frontend URL and prefer the request's www host when applicable."""
+    configured_base = (BASE_URL or '').strip()
+    request_host = request.get_host()
+
+    if configured_base:
+        parsed = urlparse(configured_base if '://' in configured_base else f"https://{configured_base}")
+        scheme = parsed.scheme or ('https' if not settings.DEBUG else request.scheme)
+        host = parsed.netloc or parsed.path
+        base_path = parsed.path.rstrip('/') if parsed.netloc else ''
+    else:
+        scheme = 'https' if not settings.DEBUG else request.scheme
+        host = request_host
+        base_path = ''
+
+    if request_host.startswith('www.') and host == request_host[4:]:
+        host = request_host
+
+    base_url = f"{scheme}://{host}".rstrip('/')
+    if base_path:
+        base_url = f"{base_url}{base_path}"
+    return base_url
 
 
 def _save_customer_shipping_details(customer, data):
@@ -265,7 +290,7 @@ def create_stripe_checkout_session(request):
             }
         )
 
-    base_url = BASE_URL.rstrip('/')
+    base_url = _checkout_base_url(request)
 
     session = stripe.checkout.Session.create(
         payment_method_types=['card'],
@@ -273,8 +298,8 @@ def create_stripe_checkout_session(request):
         mode='payment',
         customer_email=order.email or None,
         metadata={'order_id': order.id},
-        success_url=f"{base_url}/checkout/success?stripe_success=true&order_id={order.id}",
-        cancel_url=f"{base_url}/checkout",
+        success_url=f"{base_url}/checkout/?stripe_success=true&order_id={order.id}",
+        cancel_url=f"{base_url}/checkout/",
     )
 
     return Response({'url': session.url})
