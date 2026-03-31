@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import HomePage from "./HomePage";
 import { CartProvider } from "../context/CartContext";
 import Products from "./Products";
@@ -19,6 +19,7 @@ export default function App() {
             <Route path="/checkout/" element={<Checkout />} />
             <Route path="/checkout/success" element={<PaymentSuccess />} />
             <Route path="/checkout/success/" element={<PaymentSuccess />} />
+            <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </Router>
       </CartProvider>

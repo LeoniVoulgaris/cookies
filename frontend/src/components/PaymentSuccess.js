@@ -7,16 +7,22 @@ const PaymentSuccess = () => {
   const [searchParams] = useSearchParams();
   const stripeSuccess = searchParams.get('stripe_success');
   const orderId = searchParams.get('order_id');
+  const sessionId = searchParams.get('session_id');
+  const isSuccessfulReturn = stripeSuccess === 'true' || Boolean(orderId) || Boolean(sessionId);
 
   useEffect(() => {
     // Guard against direct visits to the success URL without a successful payment redirect.
-    if (stripeSuccess !== 'true') {
+    if (!isSuccessfulReturn) {
       navigate('/checkout', { replace: true });
     }
-  }, [navigate, stripeSuccess]);
+  }, [isSuccessfulReturn, navigate]);
 
-  if (stripeSuccess !== 'true') {
-    return null;
+  if (!isSuccessfulReturn) {
+    return (
+      <div className="min-h-screen bg-white flex items-center justify-center px-4">
+        <p className="text-gray-600 text-sm">Redirecting to checkout...</p>
+      </div>
+    );
   }
 
   return (
