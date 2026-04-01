@@ -11,12 +11,25 @@ from urllib.parse import urlparse
 import stripe
 from .models import Product, Cart, CartItem, Order, OrderItem
 from .serializers import CartSerializer, OrderSerializer
-from .utils import get_or_create_customer_from_token
+from .utils import get_or_create_customer_from_token, get_order_availability
 from .serializers import ProductSerializer, DetailedProductSerializer
 
 
 BASE_URL = settings.REACT_BASE_URL
 SHIPPING_FEE = Decimal('3.99')
+
+
+def _orders_closed_response(order_availability):
+    return Response(
+        {
+            'error': 'Orders are currently closed.',
+            'error_code': 'orders_closed',
+            'orders_closed': True,
+            'next_open_at': order_availability['next_open_at'],
+            'timezone': order_availability['timezone'],
+        },
+        status=status.HTTP_409_CONFLICT,
+    )
 
 
 def _checkout_base_url(request):
@@ -73,6 +86,20 @@ def product_detail(request, slug):
     product = Product.objects.get(slug=slug)
     serializer = DetailedProductSerializer(product)
     return Response(serializer.data)
+
+
+@api_view(['GET'])
+@authentication_classes([])
+@permission_classes([AllowAny])
+def order_availability_view(request):
+    availability = get_order_availability()
+    response_data = {
+        'is_open': availability['is_open'],
+        'orders_closed': not availability['is_open'],
+        'next_open_at': availability['next_open_at'],
+        'timezone': availability['timezone'],
+    }
+    return Response(response_data)
 
 @api_view(['GET', 'POST', 'DELETE'])
 @authentication_classes([])
@@ -163,6 +190,10 @@ def checkout_view(request):
     if not cart.items.exists():
         return Response({"error": "Cart is empty"}, status=status.HTTP_400_BAD_REQUEST)
 
+    order_availability = get_order_availability()
+    if not order_availability['is_open']:
+        return _orders_closed_response(order_availability)
+
     delivery_method = request.data.get('delivery_method', 'delivery')
     _save_customer_shipping_details(customer, request.data)
 
@@ -229,6 +260,10 @@ def create_stripe_checkout_session(request):
 
     if not cart.items.exists():
         return Response({'error': 'Cart is empty'}, status=status.HTTP_400_BAD_REQUEST)
+
+    order_availability = get_order_availability()
+    if not order_availability['is_open']:
+        return _orders_closed_response(order_availability)
 
     delivery_method = request.data.get('delivery_method', 'delivery')
     _save_customer_shipping_details(customer, request.data)

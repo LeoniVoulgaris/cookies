@@ -12,6 +12,49 @@ const inputClass =
   'w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 text-gray-900 text-sm';
 const labelClass = 'block text-sm text-gray-700 mb-1';
 
+const formatNextOpenAt = (nextOpenAt, timezone = 'Europe/London') => {
+  if (!nextOpenAt) {
+    return null;
+  }
+
+  const date = new Date(nextOpenAt);
+  if (Number.isNaN(date.getTime())) {
+    return null;
+  }
+
+  try {
+    return new Intl.DateTimeFormat('en-GB', {
+      weekday: 'long',
+      day: 'numeric',
+      month: 'short',
+      hour: 'numeric',
+      minute: '2-digit',
+      hour12: true,
+      timeZone: timezone,
+    }).format(date);
+  } catch {
+    return date.toLocaleString();
+  }
+};
+
+const buildOrdersClosedMessage = (nextOpenAt, timezone) => {
+  const formattedOpenTime = formatNextOpenAt(nextOpenAt, timezone);
+  if (formattedOpenTime) {
+    return `Orders are currently closed. Ordering reopens on ${formattedOpenTime}.`;
+  }
+  return 'Orders are currently closed. Please try again later.';
+};
+
+const buildRequestErrorMessage = error => {
+  if (error?.data?.error) {
+    return error.data.error;
+  }
+  if (error?.message) {
+    return error.message;
+  }
+  return 'An unexpected error occurred.';
+};
+
 const Checkout = () => {
   const { cart, checkout, createStripeSession } = useCart();
   const navigate = useNavigate();
@@ -19,6 +62,13 @@ const Checkout = () => {
   const [placing, setPlacing] = useState(false);
   const [order, setOrder] = useState(null);
   const [error, setError] = useState(null);
+  const [orderAvailability, setOrderAvailability] = useState({
+    is_open: true,
+    orders_closed: false,
+    next_open_at: null,
+    timezone: 'Europe/London',
+    loading: true,
+  });
 
   const [form, setForm] = useState({
     full_name: '',
@@ -45,6 +95,37 @@ const Checkout = () => {
     }
   }, [navigate, searchParams]);
 
+  useEffect(() => {
+    let cancelled = false;
+
+    const fetchOrderAvailability = async () => {
+      try {
+        const response = await fetch('/api/order-availability/');
+        if (!response.ok) {
+          throw new Error('Failed to check order availability');
+        }
+
+        const data = await response.json();
+        if (!cancelled) {
+          setOrderAvailability({ ...data, loading: false });
+          if (data.orders_closed) {
+            setError(buildOrdersClosedMessage(data.next_open_at, data.timezone));
+          }
+        }
+      } catch {
+        if (!cancelled) {
+          setOrderAvailability(prev => ({ ...prev, loading: false }));
+        }
+      }
+    };
+
+    fetchOrderAvailability();
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
   const items = cart?.items ?? [];
   const totalPrice = cart?.total_price ?? '0.00';
   const SHIPPING_FEE = 3.99;
@@ -52,21 +133,28 @@ const Checkout = () => {
   const requiresDelivery = form.delivery_method === 'delivery';
   const shipping = items.length > 0 && requiresDelivery ? SHIPPING_FEE : 0;
   const grandTotal = subtotal + shipping;
+  const ordersClosed = Boolean(orderAvailability.orders_closed);
 
   const handleChange = e => setForm(f => ({ ...f, [e.target.name]: e.target.value }));
 
   const handlePlaceOrder = async e => {
     e.preventDefault();
+    if (ordersClosed) {
+      setError(buildOrdersClosedMessage(orderAvailability.next_open_at, orderAvailability.timezone));
+      return;
+    }
+
     setPlacing(true);
     setError(null);
+
     try {
       if (form.payment_method === 'card') {
         const result = await createStripeSession(form);
         if (result?.url) {
           window.location.href = result.url;
+          return;
         } else {
           setError('Could not start payment. Please try again.');
-          setPlacing(false);
         }
       } else {
         const result = await checkout(form);
@@ -74,11 +162,24 @@ const Checkout = () => {
           setOrder(result);
         } else {
           setError('Failed to place order. Please try again.');
-          setPlacing(false);
         }
       }
-    } catch {
-      setError('An unexpected error occurred.');
+    } catch (requestError) {
+      const errorData = requestError?.data;
+      if (errorData?.orders_closed || errorData?.error_code === 'orders_closed') {
+        setOrderAvailability(prev => ({
+          ...prev,
+          is_open: false,
+          orders_closed: true,
+          next_open_at: errorData.next_open_at || prev.next_open_at,
+          timezone: errorData.timezone || prev.timezone,
+          loading: false,
+        }));
+        setError(buildOrdersClosedMessage(errorData.next_open_at, errorData.timezone));
+      } else {
+        setError(buildRequestErrorMessage(requestError));
+      }
+    } finally {
       setPlacing(false);
     }
   };
@@ -200,6 +301,12 @@ const Checkout = () => {
         </button>
 
         <h1 className="text-3xl text-gray-900 mb-8">Checkout</h1>
+
+        {ordersClosed && (
+          <div className="mb-6 rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-amber-900 text-sm">
+            {buildOrdersClosedMessage(orderAvailability.next_open_at, orderAvailability.timezone)}
+          </div>
+        )}
 
         {items.length === 0 ? (
           <div className="text-center py-20 text-gray-400">
@@ -439,10 +546,16 @@ const Checkout = () => {
               {error && <p className="text-red-600 text-sm">{error}</p>}
               <button
                 type="submit"
-                disabled={placing}
+                disabled={placing || ordersClosed || orderAvailability.loading}
                 className="w-full bg-red-600 text-white py-3 rounded-lg hover:bg-red-700 transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
               >
-                {placing ? 'Placing Order...' : 'Place Order'}
+                {orderAvailability.loading
+                  ? 'Checking Availability...'
+                  : placing
+                  ? 'Placing Order...'
+                  : ordersClosed
+                  ? 'Orders Reopen Soon'
+                  : 'Place Order'}
               </button>
             </div>
           </form>

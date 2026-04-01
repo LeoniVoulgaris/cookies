@@ -17,9 +17,20 @@ export const CartProvider = ({ children }) => {
             'Content-Type': 'application/json',
         };
         const response = await fetch(url, { ...options, headers });
-        if (!response.ok) return null;
         if (response.status === 204) return null;
-        return response.json();
+
+        const contentType = response.headers.get('content-type') || '';
+        const isJsonResponse = contentType.includes('application/json');
+        const data = isJsonResponse ? await response.json() : null;
+
+        if (!response.ok) {
+            const error = new Error(data?.error || 'Request failed');
+            error.status = response.status;
+            error.data = data;
+            throw error;
+        }
+
+        return data;
     };
 
     const fetchCart = async () => {
