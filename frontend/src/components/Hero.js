@@ -1,6 +1,6 @@
 import React from "react";
 
-import tower from "../assets/img/tower.png";
+import Biscoff_visual from "../assets/img/Biscoff_visual.png";
 import { ShoppingCart, Star } from "lucide-react";
 import {ImageWithFallback} from "../layouts/ImageWithFallback";
 
@@ -41,7 +41,7 @@ const Hero = () => {
             <div className="relative">
               <div className="aspect-[4/5] sm:aspect-square rounded-2xl overflow-hidden shadow-2xl max-w-md sm:max-w-xl md:max-w-none mx-auto md:scale-110 origin-center">
                 <ImageWithFallback
-                  src={tower}
+                  src={Biscoff_visual}
                   alt="Fresh baked cookies"
                   className="w-full h-full object-cover"
                 />
